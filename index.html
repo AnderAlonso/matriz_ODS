@@ -51,16 +51,7 @@ button{font-family:'Sora',sans-serif;cursor:pointer;border:none;background:none}
 .hdr-text p{font-size:.8rem;color:rgba(255,255,255,.6);max-width:500px;line-height:1.6}
 .hdr-controls{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
 
-/* View toggle */
-.view-toggle{
-  display:flex;border-radius:20px;overflow:hidden;
-  border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);
-}
-.vt-btn{
-  padding:7px 18px;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.6);
-  letter-spacing:.03em;transition:var(--transition);display:flex;align-items:center;gap:7px;
-}
-.vt-btn.active{background:var(--c-accent);color:var(--c-header)}
+/* View toggle removed — now in toolbar bar below header */
 .vt-btn svg{width:14px;height:14px;flex-shrink:0}
 
 /* Legend */
@@ -72,24 +63,27 @@ button{font-family:'Sora',sans-serif;cursor:pointer;border:none;background:none}
 .ld-none{background:var(--c-none)}
 
 /* ═══════════════════════════════════════════
-   TOOLBAR (filters)
+   TOOLBAR (view toggle bar only)
 ═══════════════════════════════════════════ */
 .toolbar{
   background:var(--c-white);padding:10px 40px;
   border-bottom:1px solid var(--c-border);
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
 }
-.tb-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--c-muted)}
-.filter-chip{
-  padding:5px 14px;border-radius:20px;font-size:.76rem;font-weight:600;
-  border:1.5px solid var(--c-border);color:var(--c-muted);background:var(--c-surface);
-  transition:var(--transition);
+.view-toggle-bar{
+  display:flex;border-radius:24px;overflow:hidden;
+  border:2px solid var(--c-border);background:var(--c-surface);
 }
-.filter-chip:hover{border-color:var(--c-accent);color:var(--c-text)}
-.filter-chip.fc-all.active{background:var(--c-header);border-color:var(--c-header);color:#fff}
-.filter-chip.fc-direct.active{background:var(--c-direct);border-color:var(--c-direct);color:#fff}
-.filter-chip.fc-indirect.active{background:var(--c-indirect);border-color:var(--c-indirect);color:#fff}
-.filter-chip.fc-none.active{background:var(--c-none);border-color:var(--c-none);color:#fff}
+.vtb-btn{
+  padding:8px 22px;font-size:.8rem;font-weight:600;color:var(--c-muted);
+  display:flex;align-items:center;gap:7px;transition:var(--transition);
+  border-radius:22px;
+}
+.vtb-btn:hover{color:var(--c-text)}
+.vtb-btn.active{
+  background:var(--c-header);color:var(--c-accent);
+  box-shadow:0 2px 8px rgba(28,43,58,.18);
+}
 
 /* ═══════════════════════════════════════════
    MATRIX VIEW
@@ -119,7 +113,7 @@ thead th:first-child{
   border-bottom:2px solid var(--c-border);border-right:1px solid var(--c-border);
   vertical-align:bottom;cursor:pointer;transition:background var(--transition);
 }
-.ods-th:hover,.ods-th.col-hl{background:#e3e8ef}
+.ods-th:hover,.ods-th.col-hl{background:#dde4ef}
 .ods-th img{width:32px;height:32px;border-radius:5px;margin:0 auto 2px;transition:transform var(--transition)}
 .ods-th:hover img,.ods-th.col-hl img{transform:scale(1.12)}
 .ods-num{font-size:.6rem;font-weight:700;color:var(--c-muted)}
@@ -155,6 +149,7 @@ tbody tr:hover td:first-child{background:#f7faff}
 }
 .data-cell.col-hl{background:rgba(232,160,32,.08)!important}
 .data-cell.row-hl{background:rgba(28,43,58,.04)!important}
+.instr-cell.row-hl-header{background:#eef3ff!important;}
 
 .cell-dot{
   width:20px;height:20px;border-radius:50%;margin:0 auto;
@@ -437,16 +432,6 @@ ul.linkages li.hl-indirect{box-shadow:0 0 0 3px var(--c-indirect),0 4px 14px rgb
     <p>Vinculación entre 15 instrumentos del sector educativo peruano y los 17 ODS de la Agenda 2030. Haz clic en cualquier celda para explorar la relación.</p>
   </div>
   <div class="hdr-controls">
-    <div class="view-toggle">
-      <button class="vt-btn active" id="btnMatrix" onclick="setView('matrix')">
-        <svg viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
-        Matriz
-      </button>
-      <button class="vt-btn" id="btnCircular" onclick="setView('circular')">
-        <svg viewBox="0 0 14 14" fill="currentColor"><circle cx="7" cy="7" r="2.5"/><circle cx="7" cy="1.5" r="1.2"/><circle cx="12.5" cy="7" r="1.2"/><circle cx="7" cy="12.5" r="1.2"/><circle cx="1.5" cy="7" r="1.2"/></svg>
-        Circular
-      </button>
-    </div>
     <div class="legend">
       <div class="leg-item"><span class="leg-dot ld-direct"></span>Relación directa</div>
       <div class="leg-item"><span class="leg-dot ld-indirect"></span>Relación indirecta</div>
@@ -455,13 +440,18 @@ ul.linkages li.hl-indirect{box-shadow:0 0 0 3px var(--c-indirect),0 4px 14px rgb
   </div>
 </div>
 
-<!-- ═══════════════ TOOLBAR ═══════════════ -->
-<div class="toolbar">
-  <span class="tb-label">Mostrar:</span>
-  <button class="filter-chip fc-all active" onclick="setFilter('all',this)">Todos</button>
-  <button class="filter-chip fc-direct" onclick="setFilter('direct',this)">Solo directas</button>
-  <button class="filter-chip fc-indirect" onclick="setFilter('indirect',this)">Solo indirectas</button>
-  <button class="filter-chip fc-none" onclick="setFilter('none',this)">Sin relación</button>
+<!-- ═══════════════ VIEW BAR ═══════════════ -->
+<div class="toolbar" style="justify-content:center;gap:0">
+  <div class="view-toggle-bar">
+    <button class="vtb-btn active" id="btnMatrix2" onclick="setView('matrix')">
+      <svg viewBox="0 0 14 14" fill="currentColor" width="13" height="13"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
+      Vista Matriz
+    </button>
+    <button class="vtb-btn" id="btnCircular2" onclick="setView('circular')">
+      <svg viewBox="0 0 14 14" fill="currentColor" width="13" height="13"><circle cx="7" cy="7" r="2.5"/><circle cx="7" cy="1.5" r="1.2"/><circle cx="12.5" cy="7" r="1.2"/><circle cx="7" cy="12.5" r="1.2"/><circle cx="1.5" cy="7" r="1.2"/></svg>
+      Vista Circular
+    </button>
+  </div>
 </div>
 
 <!-- ═══════════════ MATRIX VIEW ═══════════════ -->
@@ -528,6 +518,8 @@ const ODS_NAMES={1:'Fin de la pobreza',2:'Hambre cero',3:'Salud y bienestar',4:'
 
 const TYPE_COLORS={ley:'#922b3e',plan:'#1a5c2a',politica:'#1a3a7a',programa:'#6b1530',servicio:'#4a1a7a'};
 const TYPE_LABELS={ley:'Ley',plan:'Plan',politica:'Política',programa:'Programa',servicio:'Servicio'};
+/* Gendered "de la/del X" for button text */
+const TYPE_DE={ley:'de la Ley',plan:'del Plan',politica:'de la Política',programa:'del Programa',servicio:'del Servicio'};
 
 const SDG_POS={1:{l:530,t:170},2:{l:424,t:180},3:{l:333,t:208},4:{l:268,t:251},5:{l:238,t:303},6:{l:248,t:357},7:{l:296,t:405},8:{l:376,t:441},9:{l:476,t:461},10:{l:584,t:461},11:{l:684,t:441},12:{l:764,t:405},13:{l:812,t:357},14:{l:822,t:303},15:{l:792,t:251},16:{l:727,t:208},17:{l:636,t:180}};
 
@@ -598,31 +590,12 @@ function setView(v){
   currentView=v;
   document.getElementById('viewMatrix').style.display = v==='matrix'?'block':'none';
   document.getElementById('viewCircular').style.display = v==='circular'?'block':'none';
-  document.getElementById('btnMatrix').className='vt-btn'+(v==='matrix'?' active':'');
-  document.getElementById('btnCircular').className='vt-btn'+(v==='circular'?' active':'');
+  document.getElementById('btnMatrix2').className='vtb-btn'+(v==='matrix'?' active':'');
+  document.getElementById('btnCircular2').className='vtb-btn'+(v==='circular'?' active':'');
   if(v==='circular' && !circBuilt) buildCircular();
 }
 
-/* ════════════════════════════════
-   FILTER
-════════════════════════════════ */
-let activeFilter='all';
-function setFilter(f,btn){
-  activeFilter=f;
-  document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  applyFilter();
-}
-function applyFilter(){
-  document.querySelectorAll('.data-cell').forEach(cell=>{
-    const rel=cell.dataset.rel; // 'D','I','N'
-    let show=true;
-    if(activeFilter==='direct') show=rel==='D';
-    else if(activeFilter==='indirect') show=rel==='I';
-    else if(activeFilter==='none') show=rel==='N';
-    cell.classList.toggle('dimmed', !show);
-  });
-}
+/* filter removed from global bar — only in detail panel */
 
 /* ════════════════════════════════
    BUILD MATRIX TABLE
@@ -665,11 +638,33 @@ function buildMatrix(){
     body+='</tr>';
   });
   tbody.innerHTML=body;
-}
 
-/* ════════════════════════════════
-   MATRIX HOVER HIGHLIGHT
-════════════════════════════════ */
+  /* ODS column header hover → highlight full column */
+  for(let o=1;o<=17;o++){
+    const th=document.getElementById('odsTh'+o);
+    th.addEventListener('mouseenter',()=>{
+      th.classList.add('col-hl');
+      document.querySelectorAll(`.data-cell[data-ods="${o}"]`).forEach(c=>c.classList.add('col-hl'));
+    });
+    th.addEventListener('mouseleave',()=>{
+      th.classList.remove('col-hl');
+      document.querySelectorAll(`.data-cell[data-ods="${o}"]`).forEach(c=>c.classList.remove('col-hl'));
+    });
+  }
+
+  /* Instrument row header hover → highlight full row */
+  document.querySelectorAll('.instr-cell').forEach(cell=>{
+    cell.addEventListener('mouseenter',()=>{
+      const instrId=cell.closest('tr').dataset.instr;
+      cell.classList.add('row-hl-header');
+      document.querySelectorAll(`.data-cell[data-instr="${instrId}"]`).forEach(c=>c.classList.add('row-hl'));
+    });
+    cell.addEventListener('mouseleave',()=>{
+      cell.classList.remove('row-hl-header');
+      document.querySelectorAll('.row-hl').forEach(c=>c.classList.remove('row-hl'));
+    });
+  });
+}
 function hlCross(cell){
   const instrId=cell.dataset.instr;
   const odsN=+cell.dataset.ods;
@@ -702,9 +697,9 @@ function clickCell(instrId, odsNum){
 
 function showCellPopup(ins, odsNum, rel){
   const isD=rel.t==='D';
-  const borderColor=isD?'var(--c-direct)':'var(--c-indirect)';
   const tc=TYPE_COLORS[ins.type];
   const tl=TYPE_LABELS[ins.type];
+  const de=TYPE_DE[ins.type];
   document.getElementById('popupContent').innerHTML=`
     <div class="popup-header">
       <div class="popup-icon-instr" style="background:${tc}">
@@ -712,8 +707,7 @@ function showCellPopup(ins, odsNum, rel){
         <span class="pi-tag">${tl}</span>
       </div>
       <div style="flex:1">
-        <div class="popup-title">${ins.short}</div>
-        <div class="popup-subtitle">${ins.fullName}</div>
+        <div class="popup-title">${ins.fullName}</div>
       </div>
       <button class="popup-close" onclick="closePopup()">✕</button>
     </div>
@@ -726,7 +720,7 @@ function showCellPopup(ins, odsNum, rel){
     </div>
     <p style="font-size:.8rem;color:#374151;line-height:1.65;margin-bottom:18px">${rel.e}</p>
     <button class="popup-ver-mas" onclick="openDetailFromPopup('${ins.id}')">
-      Ver todas las vinculaciones de ${ins.short}
+      Ver todas las vinculaciones ${de}
       <svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 10.5l-5-5h10z"/></svg>
     </button>`;
   showPopup();
@@ -735,6 +729,7 @@ function showCellPopup(ins, odsNum, rel){
 function showSimplePopup(ins, odsNum){
   const tc=TYPE_COLORS[ins.type];
   const tl=TYPE_LABELS[ins.type];
+  const de=TYPE_DE[ins.type];
   document.getElementById('popupContent').innerHTML=`
     <div class="popup-header">
       <div class="popup-icon-instr" style="background:${tc}">
@@ -742,8 +737,7 @@ function showSimplePopup(ins, odsNum){
         <span class="pi-tag">${tl}</span>
       </div>
       <div style="flex:1">
-        <div class="popup-title">${ins.short}</div>
-        <div class="popup-subtitle">${ins.fullName}</div>
+        <div class="popup-title">${ins.fullName}</div>
       </div>
       <button class="popup-close" onclick="closePopup()">✕</button>
     </div>
@@ -755,7 +749,7 @@ function showSimplePopup(ins, odsNum){
       </div>
     </div>
     <button class="popup-ver-mas" onclick="openDetailFromPopup('${ins.id}')">
-      Ver todas las vinculaciones de ${ins.short}
+      Ver todas las vinculaciones ${de}
       <svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 10.5l-5-5h10z"/></svg>
     </button>`;
   showPopup();
@@ -765,6 +759,7 @@ function clickInstr(instrId){
   const ins=INSTRUMENTS.find(x=>x.id===instrId);
   const tc=TYPE_COLORS[ins.type];
   const tl=TYPE_LABELS[ins.type];
+  const de=TYPE_DE[ins.type];
   const dCount=Object.values(ins.ods).filter(r=>r.t==='D').length;
   const iCount=Object.values(ins.ods).filter(r=>r.t==='I').length;
   const nCount=17-dCount-iCount;
@@ -784,8 +779,7 @@ function clickInstr(instrId){
         <span class="pi-code">${ins.short.substring(0,6)}</span><span class="pi-tag">${tl}</span>
       </div>
       <div style="flex:1">
-        <div class="popup-title">${ins.short}</div>
-        <div class="popup-subtitle">${ins.fullName}</div>
+        <div class="popup-title">${ins.fullName}</div>
       </div>
       <button class="popup-close" onclick="closePopup()">✕</button>
     </div>
@@ -801,7 +795,7 @@ function clickInstr(instrId){
     </div>
     <div class="popup-grid">${tiles}</div>
     <button class="popup-ver-mas" onclick="openDetailFromPopup('${ins.id}')">
-      Ver detalle completo
+      Ver detalle completo ${de}
       <svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 10.5l-5-5h10z"/></svg>
     </button>`;
   showPopup();
