@@ -6,255 +6,425 @@
 <title>Instrumentos Normativos × ODS – Educación Perú</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════════
+   TOKENS & RESET
+═══════════════════════════════════════════ */
+:root{
+  --c-direct:#22c55e;   --c-direct-bg:#dcfce7; --c-direct-text:#15803d;
+  --c-indirect:#f59e0b; --c-indirect-bg:#fef3c7; --c-indirect-text:#92400e;
+  --c-none:#ef4444;     --c-none-bg:#fee2e2;   --c-none-text:#991b1b;
+  --c-header:#1c2b3a;   --c-accent:#e8a020;
+  --c-surface:#f4f6f9;  --c-white:#ffffff;
+  --c-border:#e2e6ea;   --c-text:#1c2432;      --c-muted:#6b7b8d;
+  --shadow-sm:0 2px 8px rgba(28,43,58,.08);
+  --shadow-md:0 8px 32px rgba(28,43,58,.14);
+  --shadow-lg:0 20px 60px rgba(28,43,58,.22);
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  --cell:44px;
+  --transition:.18s ease;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Sora',sans-serif;background:#eef1f5;min-height:100vh}
+body{font-family:'Sora',sans-serif;background:var(--c-surface);color:var(--c-text);min-height:100vh}
+img{display:block}
+button{font-family:'Sora',sans-serif;cursor:pointer;border:none;background:none}
 
-/* ── PAGE HEADER ── */
+/* ═══════════════════════════════════════════
+   PAGE HEADER
+═══════════════════════════════════════════ */
 .page-header{
-  background:#1c2b3a;
-  padding:28px 48px 24px;
-  border-bottom:3px solid #e8a020;
-  display:flex;align-items:flex-start;
-  justify-content:space-between;flex-wrap:wrap;gap:20px;
-  position:relative;overflow:hidden;
+  background:var(--c-header);padding:28px 40px 22px;
+  border-bottom:3px solid var(--c-accent);
+  display:flex;align-items:flex-start;justify-content:space-between;
+  flex-wrap:wrap;gap:20px;position:relative;overflow:hidden;
 }
 .page-header::before{
-  content:'';position:absolute;right:-80px;top:-80px;
-  width:380px;height:380px;border-radius:50%;
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:320px;height:320px;border-radius:50%;
   background:radial-gradient(circle,rgba(232,160,32,.12) 0%,transparent 70%);
   pointer-events:none;
 }
-.header-text h1{
+.hdr-text h1{
   font-family:'DM Serif Display',serif;font-weight:400;
-  font-size:1.75rem;color:#fff;line-height:1.2;margin-bottom:6px;
+  font-size:1.6rem;color:#fff;line-height:1.25;margin-bottom:5px;
 }
-.header-text h1 span{color:#e8a020}
-.header-text p{font-size:.8rem;color:rgba(255,255,255,.6);max-width:520px;line-height:1.6}
-.header-legend{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin-top:4px}
-.hl-group{display:flex;gap:10px;align-items:center}
-.hl-sep{width:1px;height:28px;background:rgba(255,255,255,.15)}
-.leg-item{display:flex;align-items:center;gap:6px;font-size:.72rem;color:rgba(255,255,255,.75);font-weight:500;white-space:nowrap}
-.leg-swatch{width:16px;height:16px;border-radius:4px;flex-shrink:0}
-.sw-ley{background:#922b3e}.sw-plan{background:#1a5c2a}.sw-politica{background:#1a3a7a}
-.sw-programa{background:#6b1530}.sw-servicio{background:#4a1a7a}
-.leg-line{width:24px;height:3px;border-radius:2px;flex-shrink:0}
-.sw-directa{background:#22c55e}.sw-indirecta{background:#3b82f6;background-image:repeating-linear-gradient(90deg,#3b82f6 0,#3b82f6 5px,transparent 5px,transparent 8px)}
+.hdr-text h1 span{color:var(--c-accent)}
+.hdr-text p{font-size:.8rem;color:rgba(255,255,255,.6);max-width:500px;line-height:1.6}
+.hdr-controls{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
 
-/* ── OUTER SCROLL WRAPPER ── */
-.matrix-scroll{overflow-x:auto;overflow-y:hidden;padding:24px 0 0}
-.matrix-scale-wrap{
-  width:1120px;margin:0 auto;
+/* View toggle */
+.view-toggle{
+  display:flex;border-radius:20px;overflow:hidden;
+  border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);
 }
+.vt-btn{
+  padding:7px 18px;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.6);
+  letter-spacing:.03em;transition:var(--transition);display:flex;align-items:center;gap:7px;
+}
+.vt-btn.active{background:var(--c-accent);color:var(--c-header)}
+.vt-btn svg{width:14px;height:14px;flex-shrink:0}
 
-/* ── MAIN CONTAINER ── */
+/* Legend */
+.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.leg-item{display:flex;align-items:center;gap:7px;font-size:.72rem;color:rgba(255,255,255,.72);font-weight:500}
+.leg-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+.ld-direct{background:var(--c-direct)}
+.ld-indirect{background:var(--c-indirect)}
+.ld-none{background:var(--c-none)}
+
+/* ═══════════════════════════════════════════
+   TOOLBAR (filters)
+═══════════════════════════════════════════ */
+.toolbar{
+  background:var(--c-white);padding:10px 40px;
+  border-bottom:1px solid var(--c-border);
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.tb-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--c-muted)}
+.filter-chip{
+  padding:5px 14px;border-radius:20px;font-size:.76rem;font-weight:600;
+  border:1.5px solid var(--c-border);color:var(--c-muted);background:var(--c-surface);
+  transition:var(--transition);
+}
+.filter-chip:hover{border-color:var(--c-accent);color:var(--c-text)}
+.filter-chip.fc-all.active{background:var(--c-header);border-color:var(--c-header);color:#fff}
+.filter-chip.fc-direct.active{background:var(--c-direct);border-color:var(--c-direct);color:#fff}
+.filter-chip.fc-indirect.active{background:var(--c-indirect);border-color:var(--c-indirect);color:#fff}
+.filter-chip.fc-none.active{background:var(--c-none);border-color:var(--c-none);color:#fff}
+
+/* ═══════════════════════════════════════════
+   MATRIX VIEW
+═══════════════════════════════════════════ */
+.view-matrix{display:block}
+.view-circular{display:none}
+
+.matrix-scroll{overflow-x:auto;padding:24px 40px 40px}
+table{
+  border-collapse:collapse;background:var(--c-white);
+  border-radius:var(--radius-md);overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  table-layout:fixed;
+}
+/* Header corner */
+thead th:first-child{
+  width:180px;min-width:160px;background:#f0f3f7;
+  border-right:2px solid var(--c-border);border-bottom:2px solid var(--c-border);
+  padding:12px 14px;font-size:.65rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--c-muted);
+  vertical-align:bottom;text-align:left;
+}
+/* ODS header cells */
+.ods-th{
+  width:var(--cell);min-width:var(--cell);padding:7px 3px;
+  text-align:center;background:#f0f3f7;
+  border-bottom:2px solid var(--c-border);border-right:1px solid var(--c-border);
+  vertical-align:bottom;cursor:pointer;transition:background var(--transition);
+}
+.ods-th:hover,.ods-th.col-hl{background:#e3e8ef}
+.ods-th img{width:32px;height:32px;border-radius:5px;margin:0 auto 2px;transition:transform var(--transition)}
+.ods-th:hover img,.ods-th.col-hl img{transform:scale(1.12)}
+.ods-num{font-size:.6rem;font-weight:700;color:var(--c-muted)}
+
+/* Instrument rows */
+tbody tr{border-bottom:1px solid var(--c-border);transition:background var(--transition)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover td:first-child{background:#f7faff}
+
+.instr-cell{
+  padding:10px 14px;font-size:.76rem;font-weight:500;color:var(--c-text);
+  border-right:2px solid var(--c-border);vertical-align:middle;line-height:1.35;
+  cursor:pointer;transition:background var(--transition);
+}
+.instr-cell:hover{background:#f7faff}
+.instr-tag{
+  display:inline-block;font-size:.6rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;padding:2px 6px;border-radius:4px;margin-right:5px;
+}
+.tag-ley{background:#fde8c8;color:#9a4f00}
+.tag-plan{background:#d4e8d4;color:#1a5c2a}
+.tag-politica{background:#d4e0f5;color:#1a3a7a}
+.tag-programa{background:#f5d4e0;color:#7a1a3a}
+.tag-servicio{background:#e8d4f5;color:#4a1a7a}
+.instr-short{font-weight:700;color:var(--c-header)}
+.instr-full{display:block;font-size:.68rem;color:var(--c-muted);margin-top:1px;font-weight:400}
+
+/* DATA CELLS */
+.data-cell{
+  width:var(--cell);height:var(--cell);text-align:center;
+  border-right:1px solid var(--c-border);vertical-align:middle;
+  padding:0;cursor:pointer;position:relative;transition:background var(--transition);
+}
+.data-cell.col-hl{background:rgba(232,160,32,.08)!important}
+.data-cell.row-hl{background:rgba(28,43,58,.04)!important}
+
+.cell-dot{
+  width:20px;height:20px;border-radius:50%;margin:0 auto;
+  transition:transform var(--transition),box-shadow var(--transition);
+}
+.data-cell:hover .cell-dot{transform:scale(1.3);box-shadow:0 0 8px rgba(0,0,0,.2)}
+.dot-direct{background:var(--c-direct)}
+.dot-indirect{background:var(--c-indirect)}
+.dot-none{background:var(--c-none);opacity:.45}
+
+/* Filter dimming */
+.data-cell.dimmed .cell-dot{opacity:.1}
+.data-cell.dimmed{pointer-events:none}
+
+/* ═══════════════════════════════════════════
+   POPUP (click tooltip)
+═══════════════════════════════════════════ */
+.popup-overlay{
+  position:fixed;inset:0;background:rgba(10,20,40,.45);
+  z-index:900;display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.popup-overlay.show{opacity:1;pointer-events:auto}
+.popup-box{
+  background:var(--c-white);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);padding:24px;
+  max-width:560px;width:100%;
+  transform:scale(.95) translateY(8px);transition:transform .2s;
+  max-height:80vh;overflow-y:auto;
+}
+.popup-overlay.show .popup-box{transform:scale(1) translateY(0)}
+.popup-header{
+  display:flex;align-items:flex-start;gap:14px;
+  margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--c-border);
+}
+.popup-icon{width:52px;height:52px;border-radius:var(--radius-sm);flex-shrink:0}
+.popup-icon-instr{
+  width:52px;height:52px;border-radius:var(--radius-sm);flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.popup-icon-instr .pi-code{font-size:13px;font-weight:700;color:#fff;line-height:1}
+.popup-icon-instr .pi-tag{font-size:7px;font-weight:600;text-transform:uppercase;color:rgba(255,255,255,.75);letter-spacing:.06em}
+.popup-title{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.1rem;color:var(--c-header);line-height:1.3;margin-bottom:4px}
+.popup-subtitle{font-size:.74rem;color:var(--c-muted);font-style:italic}
+.popup-close{
+  margin-left:auto;flex-shrink:0;
+  width:28px;height:28px;border-radius:50%;background:var(--c-surface);
+  font-size:.9rem;color:var(--c-muted);display:flex;align-items:center;justify-content:center;
+  transition:background var(--transition);
+}
+.popup-close:hover{background:var(--c-border)}
+.popup-summary{
+  display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;
+}
+.ps-badge{
+  font-size:.7rem;font-weight:700;padding:4px 11px;border-radius:12px;
+}
+.ps-direct{background:var(--c-direct-bg);color:var(--c-direct-text)}
+.ps-indirect{background:var(--c-indirect-bg);color:var(--c-indirect-text)}
+.ps-none{background:var(--c-none-bg);color:var(--c-none-text)}
+
+/* Grid of tiles inside popup */
+.popup-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.popup-tile{
+  width:52px;height:52px;border-radius:var(--radius-sm);overflow:hidden;
+  position:relative;cursor:default;
+  border:2.5px solid transparent;transition:transform var(--transition),border-color var(--transition);
+}
+.popup-tile:hover{transform:scale(1.08)}
+.popup-tile img{width:100%;height:100%}
+/* Instr tile in popup */
+.popup-tile-instr{
+  width:68px;height:52px;border-radius:var(--radius-sm);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:#fff;border:2.5px solid transparent;
+  transition:transform var(--transition);cursor:default;padding:3px;text-align:center;
+}
+.popup-tile-instr:hover{transform:scale(1.05)}
+.popup-tile-instr .pt-code{font-size:11px;font-weight:700;line-height:1.2}
+.popup-tile-instr .pt-label{font-size:7px;opacity:.8;line-height:1.2}
+/* Relation border colors */
+.rel-direct{border-color:var(--c-direct)!important}
+.rel-indirect{border-color:var(--c-indirect)!important}
+.rel-none{opacity:.35;filter:grayscale(40%)}
+/* Corner badge */
+.rel-corner{
+  position:absolute;right:2px;bottom:2px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--c-direct);border:1.5px solid #fff;
+}
+.rel-corner.rc-indirect{background:var(--c-indirect)}
+
+.popup-ver-mas{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  width:100%;padding:10px;border-radius:var(--radius-md);
+  background:var(--c-header);color:#fff;font-size:.8rem;font-weight:600;
+  letter-spacing:.03em;transition:background var(--transition);
+}
+.popup-ver-mas:hover{background:#253d55}
+.popup-ver-mas svg{width:14px;height:14px;transition:transform var(--transition)}
+.popup-ver-mas:hover svg{transform:translateY(2px)}
+
+/* ═══════════════════════════════════════════
+   DETAIL PANEL
+═══════════════════════════════════════════ */
+.detail-panel{
+  max-height:0;overflow:hidden;transition:max-height .45s ease;
+  background:var(--c-white);border-top:3px solid var(--c-accent);
+}
+.detail-panel.open{max-height:9999px}
+.dp-inner{padding:28px 40px 36px}
+
+.dp-hdr{
+  display:flex;align-items:flex-start;gap:16px;
+  margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--c-border);
+}
+.dp-icon-img{width:60px;height:60px;border-radius:var(--radius-md);flex-shrink:0}
+.dp-icon-instr{
+  width:60px;height:60px;border-radius:var(--radius-md);flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.dp-icon-instr .di-code{font-size:18px;font-weight:700;color:#fff;line-height:1}
+.dp-icon-instr .di-tag{font-size:7.5px;font-weight:600;text-transform:uppercase;color:rgba(255,255,255,.75);letter-spacing:.06em;margin-top:3px}
+.dp-info h2{
+  font-family:'DM Serif Display',serif;font-weight:400;
+  font-size:1.2rem;color:var(--c-header);line-height:1.3;margin-bottom:6px;
+}
+.dp-stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.dp-stat{
+  font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:12px;
+}
+.dp-stat.ds-direct{background:var(--c-direct-bg);color:var(--c-direct-text)}
+.dp-stat.ds-indirect{background:var(--c-indirect-bg);color:var(--c-indirect-text)}
+.dp-stat.ds-none{background:var(--c-none-bg);color:var(--c-none-text)}
+.dp-stat.ds-total{background:var(--c-surface);color:var(--c-muted)}
+
+.dp-close{
+  margin-left:auto;flex-shrink:0;
+  width:32px;height:32px;border-radius:50%;background:var(--c-surface);
+  font-size:1rem;color:var(--c-muted);display:flex;align-items:center;justify-content:center;
+  transition:background var(--transition);
+}
+.dp-close:hover{background:var(--c-border)}
+
+/* DP filter bar */
+.dp-filter{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.dp-filter-label{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--c-muted)}
+.dp-chip{
+  padding:4px 12px;border-radius:14px;font-size:.72rem;font-weight:600;
+  border:1.5px solid var(--c-border);color:var(--c-muted);background:var(--c-surface);
+  transition:var(--transition);
+}
+.dp-chip:hover{border-color:var(--c-muted)}
+.dp-chip.dpc-all.active{background:var(--c-header);border-color:var(--c-header);color:#fff}
+.dp-chip.dpc-direct.active{background:var(--c-direct);border-color:var(--c-direct);color:#fff}
+.dp-chip.dpc-indirect.active{background:var(--c-indirect);border-color:var(--c-indirect);color:#fff}
+.dp-chip.dpc-none.active{background:var(--c-none);border-color:var(--c-none);color:#fff}
+
+/* Cards grid */
+.dp-cards{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:12px;
+}
+.dp-card{
+  border-radius:var(--radius-md);border:1px solid var(--c-border);
+  padding:14px 16px;display:flex;align-items:flex-start;gap:11px;
+  transition:box-shadow var(--transition);border-left-width:3px;
+}
+.dp-card:hover{box-shadow:var(--shadow-sm)}
+.dp-card.card-direct{border-left-color:var(--c-direct);background:#fafffe}
+.dp-card.card-indirect{border-left-color:var(--c-indirect);background:#fffcf5}
+.dp-card.card-none{border-left-color:var(--c-none);background:#fff5f5;opacity:.75}
+.dp-card.dp-hidden{display:none}
+
+.card-thumb-img{width:44px;height:44px;border-radius:var(--radius-sm);flex-shrink:0}
+.card-thumb-instr{
+  width:44px;height:44px;border-radius:var(--radius-sm);flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.card-thumb-instr .ct-code{font-size:10px;font-weight:700;color:#fff;line-height:1}
+.card-thumb-instr .ct-tag{font-size:6.5px;font-weight:600;text-transform:uppercase;color:rgba(255,255,255,.75);letter-spacing:.05em;margin-top:2px}
+.card-body h4{font-size:.8rem;font-weight:600;color:var(--c-header);margin-bottom:3px;line-height:1.3}
+.card-tipo{
+  display:inline-flex;align-items:center;gap:5px;font-size:.63rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:10px;margin-bottom:6px;
+}
+.ct-direct{background:var(--c-direct-bg);color:var(--c-direct-text)}
+.ct-indirect{background:var(--c-indirect-bg);color:var(--c-indirect-text)}
+.ct-none{background:var(--c-none-bg);color:var(--c-none-text)}
+.card-body p{font-size:.73rem;color:#4b5563;line-height:1.55}
+.card-no-rel{font-size:.73rem;color:var(--c-muted);font-style:italic}
+
+/* ═══════════════════════════════════════════
+   CIRCULAR VIEW
+═══════════════════════════════════════════ */
+.view-circular{display:none}
+.circ-scroll{overflow-x:auto;padding:24px 0 0}
+.circ-scale{width:1120px;margin:0 auto}
 .linkages-container{
   position:relative;width:1120px;height:733px;
-  background:#fff;
-  box-shadow:0 4px 32px rgba(28,43,58,.10);
-  border-radius:0;
+  background:var(--c-white);
+  box-shadow:var(--shadow-sm);
 }
-
-/* ── RINGS ── */
 ul.linkages{
   position:absolute;width:1120px;height:733px;
   list-style:none;margin:0;padding:0;
 }
 ul.linkages li{
-  width:80px;height:80px;
-  position:absolute;
-  border-radius:16px;
-  overflow:hidden;
-  cursor:pointer;
-  transition:opacity .3s,filter .3s,transform .2s,box-shadow .2s;
-  z-index:5;
+  width:80px;height:80px;position:absolute;border-radius:14px;
+  overflow:hidden;cursor:pointer;
+  transition:opacity .3s,filter .3s,transform .2s,box-shadow .2s;z-index:5;
 }
-/* Dim all when highlighting */
-ul.linkages.highlighting li{
-  opacity:.07;filter:grayscale(100%) brightness(.4);
-}
-ul.linkages li:hover{
-  opacity:1!important;filter:none!important;
-  transform:scale(1.12);z-index:50;
-  box-shadow:0 6px 24px rgba(0,0,0,.25);
-}
-ul.linkages li.highlighted{
-  opacity:1!important;filter:none!important;
-  z-index:40;
-}
-ul.linkages li.highlighted.link-directa{
-  box-shadow:0 0 0 3px #22c55e,0 4px 16px rgba(34,197,94,.4);
-  transform:scale(1.06);
-}
-ul.linkages li.highlighted.link-indirecta{
-  box-shadow:0 0 0 3px #3b82f6,0 4px 16px rgba(59,130,246,.4);
-  transform:scale(1.06);
-}
-
-/* ── ODS TILES ── */
-.sdg-item img{width:80px;height:80px;display:block;border-radius:0}
-
-/* ── INSTRUMENT TILES ── */
-.instr-item{
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:6px 5px;text-align:center;
-  border-radius:16px;
-}
-.instr-item.ley{background:#922b3e}
-.instr-item.plan{background:#1a5c2a}
-.instr-item.politica{background:#1a3a7a}
-.instr-item.programa{background:#6b1530}
-.instr-item.servicio{background:#4a1a7a}
-.instr-code{
-  font-size:17px;font-weight:700;
-  color:#fff;letter-spacing:.02em;line-height:1;
-  margin-bottom:4px;
-}
-.instr-type-tag{
-  font-size:6.5px;font-weight:600;text-transform:uppercase;
-  letter-spacing:.08em;
-  background:rgba(0,0,0,.22);
-  color:rgba(255,255,255,.85);
-  padding:2px 5px;border-radius:3px;
-  line-height:1.4;
-}
-
-/* ── CENTER BUTTON ── */
-.center-btn{
-  position:absolute;left:479px;top:286px;
-  width:162px;height:162px;border-radius:50%;
-  background:linear-gradient(145deg,#1c2b3a 0%,#253d55 50%,#1c2b3a 100%);
+ul.linkages.highlighting li{opacity:.07;filter:grayscale(100%) brightness(.4)}
+ul.linkages li:hover{opacity:1!important;filter:none!important;transform:scale(1.11);z-index:50;box-shadow:0 6px 22px rgba(0,0,0,.24)}
+ul.linkages li.highlighted{opacity:1!important;filter:none!important;z-index:40}
+ul.linkages li.hl-direct{box-shadow:0 0 0 3px var(--c-direct),0 4px 14px rgba(34,197,94,.4);transform:scale(1.06)!important}
+ul.linkages li.hl-indirect{box-shadow:0 0 0 3px var(--c-indirect),0 4px 14px rgba(245,158,11,.4);transform:scale(1.06)!important}
+.sdg-li img{width:80px;height:80px;display:block;border-radius:0}
+.instr-li{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:10;
-  box-shadow:0 4px 28px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.08);
-  cursor:default;
+  padding:6px 4px;text-align:center;border-radius:14px;width:100%;height:100%;
+}
+.instr-li.ley{background:#922b3e}.instr-li.plan{background:#1a5c2a}
+.instr-li.politica{background:#1a3a7a}.instr-li.programa{background:#6b1530}
+.instr-li.servicio{background:#4a1a7a}
+.il-code{font-size:14px;font-weight:700;color:#fff;line-height:1;margin-bottom:3px}
+.il-tag{font-size:6px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
+  background:rgba(0,0,0,.22);color:rgba(255,255,255,.85);padding:2px 5px;border-radius:3px}
+/* SVG overlay */
+.circ-svg{position:absolute;left:0;top:0;width:1120px;height:733px;pointer-events:none;z-index:3}
+/* Center */
+.circ-center{
+  position:absolute;left:479px;top:286px;width:162px;height:162px;border-radius:50%;
+  background:linear-gradient(145deg,var(--c-header) 0%,#253d55 50%,var(--c-header) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:10;box-shadow:0 4px 28px rgba(0,0,0,.28);
   border:1px solid rgba(255,255,255,.08);
 }
-.center-num{
-  font-family:'DM Serif Display',serif;font-weight:400;
-  font-size:22px;color:#e8a020;line-height:1;margin-bottom:2px;
+.cc-num{font-family:'DM Serif Display',serif;font-size:22px;color:var(--c-accent);line-height:1;margin-bottom:2px}
+.cc-label{font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;
+  color:rgba(255,255,255,.55);text-align:center;max-width:100px;line-height:1.5}
+.cc-divider{width:40px;height:1px;background:rgba(255,255,255,.15);margin:5px 0}
+/* Caption tooltip */
+.circ-caption{
+  position:absolute;background:var(--c-header);color:#fff;
+  font-size:.7rem;font-weight:500;padding:5px 10px;border-radius:var(--radius-sm);
+  white-space:normal;max-width:200px;pointer-events:none;z-index:100;
+  opacity:0;transition:opacity .15s;line-height:1.4;box-shadow:var(--shadow-md);
 }
-.center-label{
-  font-size:7px;font-weight:600;text-transform:uppercase;
-  letter-spacing:.1em;color:rgba(255,255,255,.55);
-  text-align:center;line-height:1.5;
-  max-width:100px;
-}
-.center-divider{width:40px;height:1px;background:rgba(255,255,255,.15);margin:5px 0}
+.circ-caption.visible{opacity:1}
+.cc-t{font-weight:600;font-size:.72rem;margin-bottom:2px}
+.cc-s{font-size:.63rem;color:rgba(255,255,255,.6)}
 
-/* ── SVG OVERLAY ── */
-.linkages-svg{
-  position:absolute;left:0;top:0;
-  width:1120px;height:733px;
-  pointer-events:none;z-index:3;
+/* ═══════════════════════════════════════════
+   CIRCULAR HINT
+═══════════════════════════════════════════ */
+.circ-hint{
+  width:1120px;margin:0 auto;background:#f8f9fa;
+  border-top:1px solid var(--c-border);padding:10px 24px;
+  display:flex;align-items:center;gap:24px;font-size:.71rem;color:var(--c-muted);
 }
+.circ-hint span{display:flex;align-items:center;gap:5px}
 
-/* ── CAPTION TOOLTIP ── */
-.item-caption{
-  position:absolute;
-  background:#1c2b3a;
-  color:#fff;
-  font-size:.72rem;font-weight:500;
-  padding:5px 10px;border-radius:6px;
-  white-space:nowrap;max-width:220px;white-space:normal;
-  pointer-events:none;z-index:100;
-  opacity:0;transition:opacity .2s;
-  line-height:1.4;
-  box-shadow:0 4px 16px rgba(0,0,0,.25);
-}
-.item-caption.visible{opacity:1}
-.item-caption .cap-title{font-weight:600;font-size:.75rem;margin-bottom:2px}
-.item-caption .cap-sub{font-size:.67rem;color:rgba(255,255,255,.65)}
-
-/* ── DETAIL PANEL ── */
-.detail-panel{
-  width:1120px;margin:0 auto;
-  background:#fff;
-  border-top:3px solid #e8a020;
-  padding:0;
-  max-height:0;overflow:hidden;
-  transition:max-height .4s ease,padding .3s;
-}
-.detail-panel.open{max-height:600px;padding:28px 32px 32px}
-.dp-header{
-  display:flex;align-items:flex-start;gap:16px;
-  margin-bottom:20px;padding-bottom:16px;
-  border-bottom:1px solid #e8e8e8;
-}
-.dp-icon img{width:64px;height:64px;border-radius:10px}
-.dp-icon-instr{
-  width:64px;height:64px;border-radius:10px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-}
-.dp-icon-instr .dp-code{font-size:20px;font-weight:700;color:#fff}
-.dp-icon-instr .dp-tag{font-size:8px;font-weight:600;text-transform:uppercase;color:rgba(255,255,255,.75);letter-spacing:.07em}
-.dp-info h2{
-  font-family:'DM Serif Display',serif;font-weight:400;
-  font-size:1.2rem;color:#1c2b3a;line-height:1.3;margin-bottom:4px;
-}
-.dp-info .dp-subtitle{font-size:.78rem;color:#6b7b8d;font-style:italic;margin-bottom:8px}
-.dp-info .dp-stats{display:flex;gap:12px;flex-wrap:wrap}
-.dp-stat{
-  font-size:.72rem;padding:3px 10px;border-radius:12px;font-weight:600;
-}
-.dp-stat.directa{background:#dcfce7;color:#15803d}
-.dp-stat.indirecta{background:#dbeafe;color:#1d4ed8}
-.dp-connections{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:12px;
-}
-.dp-conn-card{
-  border:1px solid #e8e8e8;border-radius:10px;
-  padding:12px 14px;
-  display:flex;align-items:flex-start;gap:10px;
-  transition:box-shadow .15s;
-}
-.dp-conn-card:hover{box-shadow:0 2px 12px rgba(28,43,58,.1)}
-.dp-conn-card.directa{border-left:3px solid #22c55e}
-.dp-conn-card.indirecta{border-left:3px solid #3b82f6}
-.dp-conn-img{width:40px;height:40px;border-radius:6px;flex-shrink:0}
-.dp-conn-instr{
-  width:40px;height:40px;border-radius:6px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;color:#fff;
-}
-.dp-conn-body h4{font-size:.78rem;font-weight:600;color:#1c2b3a;margin-bottom:2px}
-.dp-conn-body .conn-tipo{
-  font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;
-  padding:1px 6px;border-radius:8px;display:inline-block;margin-bottom:4px;
-}
-.conn-tipo.directa{background:#dcfce7;color:#15803d}
-.conn-tipo.indirecta{background:#dbeafe;color:#1d4ed8}
-.dp-conn-body p{font-size:.73rem;color:#4b5563;line-height:1.5}
-.dp-close{
-  margin-left:auto;
-  background:#f3f4f6;border:none;border-radius:50%;
-  width:32px;height:32px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:1rem;color:#6b7b8d;
-  flex-shrink:0;
-  transition:background .15s;
-}
-.dp-close:hover{background:#e5e7eb}
-
-/* ── HINT BAR ── */
-.hint-bar{
-  width:1120px;margin:0 auto;
-  background:#f8f9fa;
-  border-top:1px solid #e8e8e8;
-  padding:10px 24px;
-  display:flex;align-items:center;gap:24px;
-  font-size:.72rem;color:#6b7b8d;
-}
-.hint-bar span{display:flex;align-items:center;gap:6px}
-
-/* ── RESPONSIVE SCALE ── */
-@media (max-width:1180px){
-  .matrix-scale-wrap{
-    transform-origin:top left;
-    transform:scale(var(--ms,1));
-  }
-  .detail-panel,.hint-bar{width:100%}
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:900px){
+  .page-header{padding:20px 20px 18px}
+  .matrix-scroll,.dp-inner{padding-left:16px;padding-right:16px}
+  .toolbar{padding-left:16px;padding-right:16px}
 }
 </style>
 </head>
@@ -262,714 +432,727 @@ ul.linkages li.highlighted.link-indirecta{
 
 <!-- ═══════════════ HEADER ═══════════════ -->
 <div class="page-header">
-  <div class="header-text">
-    <h1>Instrumentos Normativos y de Política<br><span>× Objetivos de Desarrollo Sostenible</span></h1>
-    <p>Vinculación entre 14 instrumentos del sector educativo peruano y los 17 ODS de la Agenda 2030. Pasa el cursor sobre cualquier elemento para ver sus conexiones, o haz clic para explorar el detalle.</p>
+  <div class="hdr-text">
+    <h1>Instrumentos Normativos<br><span>× Objetivos de Desarrollo Sostenible</span></h1>
+    <p>Vinculación entre 15 instrumentos del sector educativo peruano y los 17 ODS de la Agenda 2030. Haz clic en cualquier celda para explorar la relación.</p>
   </div>
-  <div class="header-legend">
-    <div class="hl-group">
-      <div class="leg-item"><span class="leg-swatch sw-ley"></span>Ley</div>
-      <div class="leg-item"><span class="leg-swatch sw-plan"></span>Plan</div>
-      <div class="leg-item"><span class="leg-swatch sw-politica"></span>Política</div>
-      <div class="leg-item"><span class="leg-swatch sw-programa"></span>Programa</div>
-      <div class="leg-item"><span class="leg-swatch sw-servicio"></span>Servicio</div>
+  <div class="hdr-controls">
+    <div class="view-toggle">
+      <button class="vt-btn active" id="btnMatrix" onclick="setView('matrix')">
+        <svg viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
+        Matriz
+      </button>
+      <button class="vt-btn" id="btnCircular" onclick="setView('circular')">
+        <svg viewBox="0 0 14 14" fill="currentColor"><circle cx="7" cy="7" r="2.5"/><circle cx="7" cy="1.5" r="1.2"/><circle cx="12.5" cy="7" r="1.2"/><circle cx="7" cy="12.5" r="1.2"/><circle cx="1.5" cy="7" r="1.2"/></svg>
+        Circular
+      </button>
     </div>
-    <div class="hl-sep"></div>
-    <div class="hl-group">
-      <div class="leg-item"><span class="leg-line sw-directa"></span>Relación directa</div>
-      <div class="leg-item"><span class="leg-line sw-indirecta"></span>Relación indirecta</div>
+    <div class="legend">
+      <div class="leg-item"><span class="leg-dot ld-direct"></span>Relación directa</div>
+      <div class="leg-item"><span class="leg-dot ld-indirect"></span>Relación indirecta</div>
+      <div class="leg-item"><span class="leg-dot ld-none"></span>Sin relación</div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════ MATRIX ═══════════════ -->
-<div class="matrix-scroll">
-<div class="matrix-scale-wrap" id="scaleWrap">
-<div class="linkages-container" id="container">
+<!-- ═══════════════ TOOLBAR ═══════════════ -->
+<div class="toolbar">
+  <span class="tb-label">Mostrar:</span>
+  <button class="filter-chip fc-all active" onclick="setFilter('all',this)">Todos</button>
+  <button class="filter-chip fc-direct" onclick="setFilter('direct',this)">Solo directas</button>
+  <button class="filter-chip fc-indirect" onclick="setFilter('indirect',this)">Solo indirectas</button>
+  <button class="filter-chip fc-none" onclick="setFilter('none',this)">Sin relación</button>
+</div>
 
-  <!-- SVG overlay for connection lines -->
-  <svg class="linkages-svg" id="linesSvg" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <filter id="glow-g"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      <filter id="glow-b"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    </defs>
-  </svg>
-
-  <!-- Outer ring: instruments -->
-  <ul class="linkages" id="instrRing"></ul>
-
-  <!-- Inner ring: ODS -->
-  <ul class="linkages" id="sdgRing"></ul>
-
-  <!-- Center medallion -->
-  <div class="center-btn">
-    <div class="center-num">17</div>
-    <div class="center-label">Objetivos de<br>Desarrollo<br>Sostenible</div>
-    <div class="center-divider"></div>
-    <div class="center-label">14 instrumentos<br>normativos</div>
+<!-- ═══════════════ MATRIX VIEW ═══════════════ -->
+<div class="view-matrix" id="viewMatrix">
+  <div class="matrix-scroll">
+    <table id="matrizTable">
+      <thead id="matrizThead"></thead>
+      <tbody id="matrizTbody"></tbody>
+    </table>
   </div>
+</div>
 
-  <!-- Floating caption -->
-  <div class="item-caption" id="caption">
-    <div class="cap-title" id="capTitle"></div>
-    <div class="cap-sub" id="capSub"></div>
+<!-- ═══════════════ CIRCULAR VIEW ═══════════════ -->
+<div class="view-circular" id="viewCircular">
+  <div class="circ-scroll">
+  <div class="circ-scale" id="circScale">
+  <div class="linkages-container" id="circContainer">
+    <svg class="circ-svg" id="circSvg" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="fglow"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+    </svg>
+    <ul class="linkages" id="instrRing"></ul>
+    <ul class="linkages" id="sdgRing"></ul>
+    <div class="circ-center">
+      <div class="cc-num">17</div>
+      <div class="cc-label">Objetivos de<br>Desarrollo Sostenible</div>
+      <div class="cc-divider"></div>
+      <div class="cc-label">15 instrumentos<br>normativos</div>
+    </div>
+    <div class="circ-caption" id="circCaption">
+      <div class="cc-t" id="ccTitle"></div>
+      <div class="cc-s" id="ccSub"></div>
+    </div>
   </div>
+  </div>
+  </div>
+  <div class="circ-hint">
+    <span>💡 <strong>Hover</strong> para ver conexiones</span>
+    <span>🖱️ <strong>Clic</strong> para ver detalle completo</span>
+  </div>
+</div>
 
-</div><!-- /container -->
-</div><!-- /scale wrap -->
-</div><!-- /scroll -->
-
-<!-- Hint bar -->
-<div class="hint-bar">
-  <span>💡 <strong>Hover</strong> sobre cualquier elemento para ver sus conexiones activas</span>
-  <span>🖱️ <strong>Clic</strong> para ver el detalle completo de cada vinculación</span>
+<!-- ═══════════════ POPUP ═══════════════ -->
+<div class="popup-overlay" id="popupOverlay" onclick="closePopupClick(event)">
+  <div class="popup-box" id="popupBox">
+    <div id="popupContent"></div>
+  </div>
 </div>
 
 <!-- ═══════════════ DETAIL PANEL ═══════════════ -->
 <div class="detail-panel" id="detailPanel">
-  <div id="detailContent"></div>
+  <div class="dp-inner">
+    <div id="detailContent"></div>
+  </div>
 </div>
 
 <script>
-/* ════════════════════════════════════════
+/* ════════════════════════════════
    DATA
-════════════════════════════════════════ */
-const ODS_ICON = n => `https://obepe.org/wp-content/uploads/2026/03/S_SDG-goals_icons-individual-rgb-${String(n).padStart(2,'0')}.png`;
+════════════════════════════════ */
+const ODS_ICON = n=>`https://obepe.org/wp-content/uploads/2026/03/S_SDG-goals_icons-individual-rgb-${String(n).padStart(2,'0')}.png`;
+const ODS_NAMES={1:'Fin de la pobreza',2:'Hambre cero',3:'Salud y bienestar',4:'Educación de calidad',5:'Igualdad de género',6:'Agua limpia y saneamiento',7:'Energía asequible',8:'Trabajo decente y crecimiento',9:'Industria, innovación e infraestructura',10:'Reducción de las desigualdades',11:'Ciudades sostenibles',12:'Producción y consumo responsables',13:'Acción por el clima',14:'Vida submarina',15:'Vida de ecosistemas terrestres',16:'Paz, justicia e instituciones sólidas',17:'Alianzas para lograr los objetivos'};
 
-const ODS_NAMES = {
-  1:'Fin de la pobreza',2:'Hambre cero',3:'Salud y bienestar',
-  4:'Educación de calidad',5:'Igualdad de género',
-  6:'Agua limpia y saneamiento',7:'Energía asequible y no contaminante',
-  8:'Trabajo decente y crecimiento económico',
-  9:'Industria, innovación e infraestructura',
-  10:'Reducción de las desigualdades',
-  11:'Ciudades y comunidades sostenibles',
-  12:'Producción y consumo responsables',
-  13:'Acción por el clima',14:'Vida submarina',
-  15:'Vida de ecosistemas terrestres',
-  16:'Paz, justicia e instituciones sólidas',
-  17:'Alianzas para lograr los objetivos'
-};
+const TYPE_COLORS={ley:'#922b3e',plan:'#1a5c2a',politica:'#1a3a7a',programa:'#6b1530',servicio:'#4a1a7a'};
+const TYPE_LABELS={ley:'Ley',plan:'Plan',politica:'Política',programa:'Programa',servicio:'Servicio'};
 
-/* SDG positions (same as WSIS original) */
-const SDG_POS = {
-  1:{l:530,t:170},2:{l:424,t:180},3:{l:333,t:208},4:{l:268,t:251},
-  5:{l:238,t:303},6:{l:248,t:357},7:{l:296,t:405},8:{l:376,t:441},
-  9:{l:476,t:461},10:{l:584,t:461},11:{l:684,t:441},12:{l:764,t:405},
-  13:{l:812,t:357},14:{l:822,t:303},15:{l:792,t:251},16:{l:727,t:208},
-  17:{l:636,t:180}
-};
+const SDG_POS={1:{l:530,t:170},2:{l:424,t:180},3:{l:333,t:208},4:{l:268,t:251},5:{l:238,t:303},6:{l:248,t:357},7:{l:296,t:405},8:{l:376,t:441},9:{l:476,t:461},10:{l:584,t:461},11:{l:684,t:441},12:{l:764,t:405},13:{l:812,t:357},14:{l:822,t:303},15:{l:792,t:251},16:{l:727,t:208},17:{l:636,t:180}};
 
-/* Instrument definitions with all ODS connections */
-const INSTRUMENTS = [
-  {
-    id:'instr0',code:'LGE',type:'ley',typeLabel:'Ley',pos:{l:520,t:65},
-    fullName:'Ley General de Educación (Ley N.° 28044)',
-    ods:{
-      1:{t:'I',e:'La ley plantea una política educativa que combate la desigualdad estructural mediante mecanismos de equidad, inclusión y universalización del acceso educativo. Estas acciones pueden contribuir a romper ciclos intergeneracionales de pobreza.'},
-      2:{t:'I',e:'La Ley establece la provisión de programas complementarios de alimentación en la educación inicial y primaria, lo cual contribuye indirectamente a la seguridad alimentaria infantil.'},
-      3:{t:'I',e:'Incluye la promoción del bienestar estudiantil a través de políticas de infraestructura, programas intersectoriales y educación en salud. La articulación con sectores como salud en contextos educativos impacta en el bienestar general.'},
-      4:{t:'D',e:'Es el núcleo de la ley. Establece principios, objetivos, estructura y funciones del sistema educativo peruano con un enfoque en calidad, equidad, inclusión y pertinencia, lo que se alinea plenamente con el ODS 4.'},
-      5:{t:'I',e:'Se mencionan medidas específicas para reducir desigualdades, incluyendo el acceso y permanencia de niñas, adolescentes embarazadas y madres. Fomenta la equidad de género dentro del sistema educativo.'},
-      8:{t:'I',e:'A través de la articulación entre educación y empleo, el fomento de competencias laborales, la formación técnica, y la colaboración con el sector productivo, la ley contribuye indirectamente al acceso a empleo decente.'},
-      9:{t:'I',e:'Se promueve la investigación, la innovación educativa y la mejora de la infraestructura escolar como parte de los factores de calidad. Aunque no se enfoca en infraestructura productiva, hay un vínculo indirecto.'},
-      10:{t:'D',e:'La ley define medidas concretas para compensar desigualdades por razones económicas, sociales, étnicas, de género y geográficas. Aplica acciones afirmativas y políticas educativas inclusivas orientadas a reducir brechas estructurales.'},
-      11:{t:'I',e:'Mediante la participación social, la articulación con gobiernos locales y la promoción de entornos educativos seguros, se vincula indirectamente con el fortalecimiento del tejido comunitario y urbano.'},
-      13:{t:'I',e:'El principio de conciencia ambiental promueve actitudes de respeto y cuidado del entorno natural, alineándose con una educación que sensibiliza frente al cambio climático.'},
-      15:{t:'I',e:'Se promueve una conciencia ambiental general en el currículo y principios educativos, lo que podría tener efectos positivos indirectos en la protección de ecosistemas terrestres.'},
-      16:{t:'D',e:'La ley incorpora formación ética y cívica obligatoria, derechos humanos, fortalecimiento de la ciudadanía y cultura democrática. Todo esto se alinea directamente con la promoción de instituciones sólidas y sociedades pacíficas.'},
-      17:{t:'D',e:'Plantea un enfoque explícito de articulación intersectorial entre Estado, sociedad civil, sector privado y cooperación internacional para el desarrollo del sistema educativo.'}
-    }
-  },
-  {
-    id:'instr1',code:'PEA',type:'plan',typeLabel:'Plan',pos:{l:715,t:91},
-    fullName:'Plan Nacional de Educación Ambiental 2017–2022 (PLANEA)',
-    ods:{
-      1:{t:'I',e:'El PLANEA reconoce que la degradación ambiental afecta más intensamente a las poblaciones vulnerables y propone una educación ambiental que promueve la equidad, incidiendo indirectamente en la reducción de la pobreza.'},
-      2:{t:'I',e:'A través de líneas de acción vinculadas a alimentación saludable, sostenibilidad y seguridad alimentaria en entornos escolares, el plan contribuye indirectamente a una cultura de prevención frente a la malnutrición.'},
-      3:{t:'D',e:'El plan promueve directamente hábitos saludables, prevención de enfermedades, manejo responsable del agua y los residuos, así como la formación en salud ambiental.'},
-      4:{t:'D',e:'PLANEA es un instrumento educativo que busca transversalizar el enfoque ambiental en todos los niveles del sistema educativo formal y no formal, con estándares de calidad y equidad.'},
-      5:{t:'I',e:'Incluye un enfoque de género explícito, reconociendo brechas y promoviendo la participación equitativa en el desarrollo sostenible. Se articula con planes nacionales sobre género y cambio climático.'},
-      6:{t:'I',e:'Educa sobre el uso responsable y sostenible del agua, y promueve buenas prácticas en entornos escolares y comunitarios.'},
-      7:{t:'I',e:'Fomenta la ecoeficiencia, el consumo responsable de recursos y la reducción de la huella de carbono, alineándose con la promoción de energía sostenible desde una perspectiva educativa.'},
-      8:{t:'I',e:'El enfoque educativo incluye formación técnica con orientación ambiental, fortalecimiento de competencias para la sostenibilidad y articulación con sectores productivos responsables.'},
-      9:{t:'I',e:'Promueve el desarrollo de capacidades en investigación, innovación pedagógica y gestión institucional ecoeficiente.'},
-      10:{t:'I',e:'El plan incorpora un enfoque intercultural y territorial, priorizando poblaciones vulnerables y promoviendo igualdad de oportunidades en el acceso a una educación ambiental pertinente.'},
-      11:{t:'D',e:'Propone una transformación cultural hacia comunidades ambientalmente responsables, promueve la gestión participativa del entorno urbano y rural, y trabaja articuladamente con gobiernos locales.'},
-      12:{t:'D',e:'Uno de los ejes del PLANEA es modificar los patrones de consumo desde la educación ambiental, promoviendo las 3R, el manejo responsable de residuos y la conciencia crítica.'},
-      13:{t:'D',e:'El cambio climático es un eje transversal del plan. Promueve adaptación, mitigación, formación en riesgo climático, monitoreo participativo y reducción de la huella de carbono.'},
-      14:{t:'I',e:'Se promueve la valoración de la biodiversidad y los ecosistemas marinos en actividades educativas, especialmente en regiones costeras.'},
-      15:{t:'D',e:'El plan tiene un fuerte componente de conservación de la biodiversidad, defensa del patrimonio natural y valoración de saberes tradicionales vinculados a los ecosistemas terrestres.'},
-      16:{t:'I',e:'Fomenta la participación ciudadana ambiental, el fortalecimiento de ciudadanía y la construcción de consensos sobre el entorno común.'},
-      17:{t:'D',e:'El PLANEA es construido e implementado mediante alianzas entre el MINEDU, el MINAM, gobiernos regionales, cooperación internacional, empresas y sociedad civil.'}
-    }
-  },
-  {
-    id:'instr2',code:'ING',type:'politica',typeLabel:'Política',pos:{l:872,t:165},
-    fullName:'Política Nacional de Enseñanza del Inglés',
-    ods:{
-      1:{t:'I',e:'La política promueve el acceso a oportunidades educativas y laborales mediante el dominio del idioma inglés, contribuyendo indirectamente a mejorar la empleabilidad y reducir condiciones estructurales de pobreza.'},
-      3:{t:'I',e:'La política incorpora elementos de bienestar ligados al desarrollo personal y profesional, y al fortalecimiento del capital humano, lo que puede impactar positivamente en la salud mental y el bienestar.'},
-      4:{t:'D',e:'La política busca mejorar la calidad del aprendizaje del inglés en todos los niveles educativos, con énfasis en estándares internacionales, fortalecimiento docente, recursos educativos y formación continua.'},
-      5:{t:'I',e:'La política promueve el acceso igualitario a la enseñanza del inglés en la educación básica, superior y en el trabajo, lo que puede reducir brechas de género en el acceso a oportunidades.'},
-      8:{t:'D',e:'Busca fortalecer competencias lingüísticas en la población trabajadora para mejorar su empleabilidad y productividad, contribuyendo al crecimiento económico y al acceso a trabajo decente.'},
-      9:{t:'I',e:'A través del eje de competitividad, se promueve el acceso al desarrollo científico, la internacionalización de empresas y el uso del inglés en sectores estratégicos.'},
-      10:{t:'I',e:'Al buscar cerrar brechas educativas mediante el fortalecimiento de la enseñanza del inglés en escuelas públicas y sectores vulnerables, puede contribuir a reducir desigualdades.'},
-      16:{t:'I',e:'La política promueve la articulación intersectorial e intergubernamental y el fortalecimiento de capacidades del Estado en sectores estratégicos.'},
-      17:{t:'D',e:'La política se implementa a través de una Comisión Multisectorial permanente que involucra múltiples ministerios, organismos públicos y privados, y cooperación internacional.'}
-    }
-  },
-  {
-    id:'instr3',code:'EIB',type:'plan',typeLabel:'Plan',pos:{l:959,t:271},
-    fullName:'Plan Nacional de Educación Intercultural Bilingüe',
-    ods:{
-      1:{t:'I',e:'La EIB combate desigualdades estructurales que afectan a la población indígena, mejorando las condiciones de acceso, permanencia y calidad educativa, contribuyendo a la superación de la pobreza.'},
-      3:{t:'I',e:'La propuesta de EIB incorpora el bienestar integral como principio educativo e incluye elementos que promueven el desarrollo saludable de estudiantes indígenas en contextos rurales y de alta vulnerabilidad.'},
-      4:{t:'D',e:'El PLANEIB tiene como objetivo central garantizar aprendizajes de calidad con pertinencia cultural y lingüística. Establece estándares, perfiles docentes, gestión educativa y materiales para una educación equitativa y transformadora.'},
-      5:{t:'D',e:'El plan incorpora la igualdad de género como componente transversal y propone acciones específicas para atender las brechas de acceso, permanencia y logro de aprendizajes entre niñas y adolescentes indígenas.'},
-      8:{t:'I',e:'El fortalecimiento de competencias educativas en contextos rurales y bilingües puede contribuir a mejorar las oportunidades laborales de estudiantes indígenas.'},
-      9:{t:'I',e:'El plan promueve el fortalecimiento de redes educativas rurales, uso de TIC y mejora de infraestructura, contribuyendo a procesos de innovación educativa en territorios culturalmente diversos.'},
-      10:{t:'D',e:'La EIB es una política de equidad estructural. Su foco es cerrar brechas históricas de acceso, permanencia, logro y participación de pueblos indígenas en el sistema educativo.'},
-      11:{t:'I',e:'La EIB fortalece el tejido comunitario indígena al reconocer saberes locales, promover la gestión participativa de las escuelas y dialogar con planes de vida comunales.'},
-      12:{t:'I',e:'La propuesta pedagógica intercultural reconoce y valoriza prácticas sostenibles de los pueblos originarios, promoviendo el respeto por el entorno y los recursos.'},
-      13:{t:'I',e:'El plan incluye la recuperación de saberes indígenas sobre el territorio y el ambiente, lo cual puede fortalecer estrategias de adaptación climática desde una perspectiva culturalmente situada.'},
-      15:{t:'I',e:'A través del currículo y la valoración de los conocimientos tradicionales, el plan contribuye a la defensa del territorio, el respeto a los ecosistemas y la conservación de la biodiversidad.'},
-      16:{t:'D',e:'El plan fue construido a través de procesos participativos y de consulta previa. Fomenta la ciudadanía intercultural, participación comunitaria y fortalecimiento institucional.'},
-      17:{t:'D',e:'El PLANEIB se implementa mediante alianzas entre el MINEDU, pueblos indígenas, organizaciones de sociedad civil, cooperación internacional y otras entidades públicas.'}
-    }
-  },
-  {
-    id:'instr4',code:'CTI',type:'plan',typeLabel:'Plan',pos:{l:959,t:389},
-    fullName:'Plan Nacional Estratégico de Ciencia, Tecnología e Innovación 2006-2021',
-    ods:{
-      1:{t:'I',e:'El plan plantea fortalecer capacidades humanas, institucionales y tecnológicas en regiones excluidas, promoviendo desarrollo económico local e inclusión productiva.'},
-      2:{t:'I',e:'Se promueve la innovación tecnológica en sectores como agricultura y seguridad alimentaria, con énfasis en biotecnologías aplicadas a sistemas productivos rurales.'},
-      3:{t:'I',e:'Fomenta el desarrollo científico en salud pública, biotecnología y nutrición, así como la formación de recursos humanos en áreas vinculadas a la salud.'},
-      4:{t:'D',e:'Establece como prioridad el fortalecimiento de capacidades humanas en ciencia y tecnología mediante programas de formación, mejora de la calidad en postgrados y articulación entre academia, empresa y Estado.'},
-      5:{t:'I',e:'El plan reconoce la necesidad de participación inclusiva en CTI, lo cual puede fomentar indirectamente la equidad en el acceso a formación e innovación científica y tecnológica.'},
-      6:{t:'I',e:'Incluye la investigación en gestión de recursos hídricos y tecnologías limpias, así como el desarrollo de soluciones científicas para el saneamiento en zonas rurales.'},
-      7:{t:'I',e:'Promueve tecnologías limpias, innovación energética y biotecnologías aplicadas al uso eficiente de recursos, contribuyendo a la transición energética.'},
-      8:{t:'D',e:'El PNCTI busca aumentar la competitividad nacional mediante CTI, fortaleciendo capacidades laborales, tecnológicas y de innovación en sectores productivos estratégicos.'},
-      9:{t:'D',e:'El plan está centrado en la promoción de la investigación aplicada, infraestructura científica, fortalecimiento de centros tecnológicos y articulación con la industria.'},
-      10:{t:'I',e:'A través del enfoque territorial, se busca descentralizar la ciencia y tecnología, incorporando regiones históricamente excluidas del sistema de innovación.'},
-      11:{t:'I',e:'El plan fomenta la investigación en urbanismo sostenible, gestión ambiental urbana y tecnologías aplicadas al hábitat.'},
-      12:{t:'D',e:'Impulsa tecnologías limpias, ecoeficiencia y procesos productivos sostenibles desde la innovación, incluyendo transferencia tecnológica hacia las PYMES.'},
-      13:{t:'D',e:'El plan promueve investigación e innovación en mitigación y adaptación al cambio climático, articulando saberes tradicionales con tecnología moderna.'},
-      14:{t:'I',e:'Contempla investigación en ciencias del mar, tecnologías pesqueras sostenibles y fortalecimiento de capacidades institucionales en zonas costeras.'},
-      15:{t:'D',e:'Promueve la investigación científica en biodiversidad, manejo forestal, biotecnología y valorización de conocimientos ancestrales.'},
-      16:{t:'I',e:'Apuesta por una institucionalidad científica pública robusta, con participación multisectorial y transparencia en la gestión del conocimiento.'},
-      17:{t:'D',e:'El plan se construye desde una lógica de alianzas nacionales e internacionales entre Estado, sector privado, academia y cooperación internacional.'}
-    }
-  },
-  {
-    id:'instr5',code:'PES',type:'politica',typeLabel:'Política',pos:{l:872,t:495},
-    fullName:'Política Nacional de Educación Superior y Técnico-Productiva',
-    ods:{
-      1:{t:'I',e:'La educación técnico-productiva mejora la empleabilidad y reduce la pobreza al brindar herramientas para acceder a trabajos mejor remunerados.'},
-      2:{t:'I',e:'Contribuye indirectamente al fortalecer habilidades que mejoran la productividad agrícola y cadenas alimentarias.'},
-      4:{t:'D',e:'Es directamente relevante para este ODS al mejorar la calidad, pertinencia y acceso a la educación superior y técnica, promoviendo aprendizaje inclusivo.'},
-      5:{t:'I',e:'Promueve la igualdad al ofrecer acceso equitativo a mujeres y hombres en programas de educación técnica y superior.'},
-      8:{t:'D',e:'Fomenta el trabajo decente y el crecimiento económico al capacitar personas en habilidades técnicas y profesionales necesarias para sectores productivos.'},
-      9:{t:'D',e:'La formación técnica aporta recursos humanos capacitados para sectores industriales y fomenta la innovación mediante investigación aplicada.'},
-      10:{t:'I',e:'Reduce desigualdades al proporcionar educación accesible para poblaciones desfavorecidas, especialmente en zonas rurales o vulnerables.'},
-      11:{t:'I',e:'Apoya la sostenibilidad urbana al formar profesionales que pueden implementar soluciones técnicas en vivienda, transporte y planificación urbana.'},
-      13:{t:'I',e:'La formación en temas técnicos puede incluir habilidades para desarrollar soluciones de mitigación y adaptación al cambio climático.'},
-      17:{t:'D',e:'Fomenta alianzas entre instituciones educativas, sectores productivos y gobiernos para desarrollar programas de educación técnica pertinente.'}
-    }
-  },
-  {
-    id:'instr6',code:'WAM',type:'programa',typeLabel:'Programa',pos:{l:715,t:569},
-    fullName:'Programa de Alimentación Escolar Wasi Mikuna (ex Qali Warmi)',
-    ods:{
-      1:{t:'I',e:'Mejora la seguridad alimentaria de niños en situación de pobreza, reduciendo vulnerabilidades económicas en sus familias.'},
-      2:{t:'D',e:'Proporciona acceso a alimentos nutritivos a estudiantes, combatiendo el hambre y la desnutrición infantil.'},
-      3:{t:'D',e:'Mejora la salud infantil al garantizar una alimentación balanceada que contribuye al desarrollo físico y mental.'},
-      4:{t:'I',e:'Contribuye al aprendizaje efectivo al mejorar la nutrición de los estudiantes, lo que impacta positivamente en su rendimiento académico.'},
-      5:{t:'I',e:'Al brindar alimentación escolar, promueve la equidad de acceso a la educación, especialmente para niñas en comunidades vulnerables.'},
-      8:{t:'I',e:'Al fortalecer cadenas productivas locales para el abastecimiento de alimentos, apoya el crecimiento económico y el empleo en las comunidades.'},
-      10:{t:'D',e:'Reduce desigualdades al garantizar acceso equitativo a la alimentación para niños de zonas rurales y urbanas vulnerables.'},
-      12:{t:'I',e:'Promueve prácticas sostenibles al adquirir alimentos de pequeños productores y cadenas de suministro responsables.'},
-      15:{t:'I',e:'Puede fomentar el uso sostenible de recursos agrícolas al adquirir productos de agricultores locales bajo prácticas responsables.'},
-      17:{t:'D',e:'Fortalece alianzas público-privadas y comunitarias para implementar el programa, involucrando a gobiernos locales, comunidades y proveedores.'}
-    }
-  },
-  {
-    id:'instr7',code:'LU',type:'ley',typeLabel:'Ley',pos:{l:520,t:595},
-    fullName:'Ley Universitaria (Ley N° 30220, mod. 2024 por Ley N° 32105)',
-    ods:{
-      1:{t:'I',e:'Promueve la equidad educativa y el acceso a la educación superior, mejorando las oportunidades económicas a largo plazo.'},
-      3:{t:'I',e:'Fomenta la investigación universitaria en salud y bienestar, mejorando la calidad de vida de las comunidades.'},
-      4:{t:'D',e:'Establece estándares de calidad para la educación universitaria, asegurando formación inclusiva y de excelencia.'},
-      5:{t:'D',e:'Garantiza igualdad de oportunidades en el acceso y permanencia en la universidad, especialmente para mujeres y grupos vulnerables.'},
-      8:{t:'I',e:'Contribuye a la formación de profesionales altamente capacitados, promoviendo empleo decente y crecimiento económico.'},
-      9:{t:'D',e:'Impulsa la investigación e innovación universitaria para fortalecer industrias e infraestructura tecnológica.'},
-      10:{t:'D',e:'Promueve la equidad en el acceso a la educación superior, reduciendo brechas entre regiones y grupos sociales.'},
-      11:{t:'I',e:'Contribuye al desarrollo sostenible mediante programas académicos y de investigación orientados a problemas urbanos.'},
-      12:{t:'I',e:'Fomenta la investigación en sostenibilidad y producción responsable desde las universidades.'},
-      13:{t:'I',e:'Estimula la investigación universitaria y formación profesional en cambio climático y sostenibilidad ambiental.'},
-      14:{t:'I',e:'A través de investigaciones específicas en universidades relacionadas con biodiversidad marina y conservación.'},
-      15:{t:'I',e:'Fortalece la investigación académica en conservación de ecosistemas terrestres y sostenibilidad ambiental.'},
-      16:{t:'D',e:'Fortalece la gobernanza universitaria, promoviendo instituciones educativas transparentes, democráticas y sólidas.'},
-      17:{t:'D',e:'Fomenta la cooperación interinstitucional e internacional para investigación y desarrollo educativo.'}
-    }
-  },
-  {
-    id:'instr8',code:'FDO',type:'programa',typeLabel:'Programa',pos:{l:325,t:569},
-    fullName:'Programa Nacional de Formación Docente en Servicio',
-    ods:{
-      1:{t:'I',e:'Mejora la calidad educativa, contribuyendo a reducir la pobreza a largo plazo al incrementar las oportunidades para los estudiantes.'},
-      3:{t:'I',e:'La formación docente incluye temas de bienestar emocional y salud, que pueden impactar positivamente en la comunidad educativa.'},
-      4:{t:'D',e:'Fortalece las capacidades docentes, asegurando educación inclusiva, equitativa y de calidad para los estudiantes.'},
-      5:{t:'D',e:'Promueve la equidad en la educación, abordando estereotipos de género a través de la formación docente.'},
-      8:{t:'I',e:'Mejora la calidad del trabajo docente al brindar herramientas y capacitación para su desarrollo profesional.'},
-      10:{t:'I',e:'Reduce desigualdades educativas al capacitar a docentes en contextos rurales y urbanos vulnerables.'},
-      13:{t:'I',e:'Incluye formación sobre sostenibilidad ambiental y educación climática, fortaleciendo la acción por el clima.'},
-      15:{t:'I',e:'Capacita a docentes en temas ambientales, contribuyendo al conocimiento y la conservación de ecosistemas terrestres.'},
-      16:{t:'I',e:'Fomenta instituciones educativas sólidas al mejorar la calidad docente y promover valores democráticos y de convivencia.'},
-      17:{t:'D',e:'Fortalece alianzas con universidades, gobiernos locales y organismos internacionales para implementar el programa.'}
-    }
-  },
-  {
-    id:'instr9',code:'PIE',type:'programa',typeLabel:'Programa',pos:{l:168,t:495},
-    fullName:'Programa Nacional de Infraestructura Educativa al 2025',
-    ods:{
-      1:{t:'I',e:'Mejora educativa puede reducir pobreza a largo plazo.'},
-      3:{t:'I',e:'Infraestructura adecuada mejora la salud escolar y el bienestar de los estudiantes.'},
-      4:{t:'D',e:'Mejora directa del acceso y la calidad educativa mediante la construcción y rehabilitación de infraestructura.'},
-      5:{t:'I',e:'Infraestructura adecuada promueve la asistencia y permanencia femenina en el sistema educativo.'},
-      6:{t:'I',e:'Incluye acceso a agua y saneamiento en las escuelas como criterio de calidad.'},
-      8:{t:'I',e:'Genera empleo en la construcción e incrementa el capital humano a través de mejor infraestructura.'},
-      9:{t:'D',e:'Desarrollo de infraestructura educativa pública como bien de uso colectivo.'},
-      10:{t:'I',e:'Reduce brechas educativas en poblaciones vulnerables mediante acceso a mejores instalaciones.'},
-      11:{t:'I',e:'Aporta al desarrollo urbano y comunitario mediante infraestructura educativa de calidad.'},
-      13:{t:'I',e:'Puede incorporar criterios de sostenibilidad ambiental y eficiencia energética en la construcción.'},
-      16:{t:'I',e:'Fortalece la institucionalidad educativa pública y su presencia territorial.'},
-      17:{t:'I',e:'Puede requerir alianzas público-privadas e internacionales para su financiamiento.'}
-    }
-  },
-  {
-    id:'instr10',code:'PNB',type:'programa',typeLabel:'Programa',pos:{l:81,t:389},
-    fullName:'Programa Nacional de Becas y Crédito Educativo (PRONABEC)',
-    ods:{
-      1:{t:'D',e:'Brinda acceso a educación superior a personas de bajos recursos, promoviendo movilidad social y ruptura de ciclos de pobreza.'},
-      3:{t:'I',e:'Mejora condiciones de vida, impactando positivamente en la salud mental y física de los beneficiarios.'},
-      4:{t:'D',e:'Facilita el acceso y permanencia en educación superior para poblaciones vulnerables mediante becas y créditos.'},
-      5:{t:'I',e:'Contribuye a cerrar brechas de género en la educación superior al otorgar becas sin discriminación.'},
-      8:{t:'D',e:'Mejora competencias laborales y empleabilidad de jóvenes profesionales.'},
-      9:{t:'I',e:'Forma capital humano calificado que puede impulsar innovación y desarrollo tecnológico.'},
-      10:{t:'D',e:'Reduce desigualdades sociales y territoriales en acceso a la educación superior.'},
-      16:{t:'I',e:'Fomenta ciudadanía informada y confianza en las instituciones del Estado.'},
-      17:{t:'I',e:'Colabora con instituciones educativas nacionales e internacionales y actores del sector privado.'}
-    }
-  },
-  {
-    id:'instr11',code:'PLO',type:'politica',typeLabel:'Política',pos:{l:81,t:271},
-    fullName:'Política Nacional de Lenguas Originarias, Tradición Oral e Interculturalidad',
-    ods:{
-      1:{t:'I',e:'Promueve la inclusión social y cultural de pueblos originarios, favoreciendo su desarrollo económico.'},
-      4:{t:'D',e:'Fomenta la educación intercultural bilingüe, mejorando el acceso a una educación inclusiva y de calidad.'},
-      5:{t:'I',e:'Contribuye a la igualdad de género al empoderar a las mujeres de pueblos originarios mediante el acceso a sus lenguas y tradiciones.'},
-      8:{t:'I',e:'Potencia el desarrollo de capacidades y habilidades en lenguas originarias, abriendo oportunidades laborales culturalmente pertinentes.'},
-      9:{t:'I',e:'Promueve la innovación en la preservación y enseñanza de lenguas y tradiciones, apoyando la diversidad cultural.'},
-      10:{t:'D',e:'Reduce las desigualdades sociales y culturales, promoviendo la inclusión de las lenguas originarias en el sistema educativo.'},
-      15:{t:'I',e:'Contribuye a la preservación de culturas indígenas que están intrínsecamente conectadas con la conservación del medio ambiente.'},
-      16:{t:'I',e:'Fortalece la justicia cultural e impulsa la protección de los derechos de los pueblos originarios.'},
-      17:{t:'I',e:'Fomenta alianzas con instituciones que apoyan la diversidad lingüística y cultural a nivel nacional e internacional.'}
-    }
-  },
-  {
-    id:'instr12',code:'SER',type:'servicio',typeLabel:'Servicio',pos:{l:168,t:165},
-    fullName:'Servicios de Educación Rural',
-    ods:{
-      1:{t:'I',e:'Mejorar el acceso a educación rural contribuye a romper ciclos de pobreza al aumentar las oportunidades económicas futuras.'},
-      2:{t:'I',e:'La educación rural puede incluir contenidos sobre seguridad alimentaria y prácticas agrícolas sostenibles.'},
-      3:{t:'I',e:'La educación puede mejorar prácticas de higiene, salud y bienestar en comunidades rurales.'},
-      4:{t:'D',e:'Es el núcleo del servicio: mejorar el acceso, equidad y calidad educativa en zonas rurales.'},
-      5:{t:'I',e:'Ampliar servicios educativos en zonas rurales puede reducir brechas de género, especialmente en acceso a educación de niñas.'},
-      8:{t:'I',e:'La educación mejora la empleabilidad y productividad de jóvenes rurales a largo plazo.'},
-      9:{t:'I',e:'El despliegue de servicios educativos puede requerir infraestructura como aulas, caminos y conectividad.'},
-      10:{t:'D',e:'Busca disminuir las brechas educativas entre zonas urbanas y rurales, clave para reducir desigualdades estructurales.'},
-      11:{t:'I',e:'Contribuye a fortalecer comunidades sostenibles al empoderar a sus miembros mediante educación de calidad.'},
-      15:{t:'I',e:'En zonas rurales, la educación puede incluir contenidos de conservación del entorno natural y prácticas sostenibles.'},
-      16:{t:'I',e:'Fortalecer la educación promueve ciudadanía activa y el respeto por los derechos, incluso en comunidades rurales.'},
-      17:{t:'I',e:'El desarrollo de la política educativa rural puede requerir alianzas con gobiernos locales, ONG y cooperación internacional.'}
-    }
-  },
-  {
-    id:'instr13',code:'ALF',type:'programa',typeLabel:'Programa',pos:{l:325,t:91},
-    fullName:'Programa Nacional de Alfabetización',
-    ods:{
-      1:{t:'I',e:'Contribuye a reducir la pobreza al mejorar las oportunidades económicas de personas alfabetizadas.'},
-      2:{t:'I',e:'Personas alfabetizadas pueden acceder mejor a información sobre nutrición y seguridad alimentaria.'},
-      3:{t:'I',e:'La alfabetización favorece el acceso a información sobre salud, higiene y bienestar.'},
-      4:{t:'D',e:'El objetivo principal del programa es garantizar el derecho a la educación a personas jóvenes y adultas.'},
-      5:{t:'I',e:'Favorece el empoderamiento de mujeres, especialmente en zonas donde el analfabetismo afecta más a ellas.'},
-      8:{t:'I',e:'La alfabetización mejora la empleabilidad, especialmente en sectores informales.'},
-      10:{t:'D',e:'Reduce desigualdades educativas entre población alfabetizada y analfabeta.'},
-      11:{t:'I',e:'Fortalece comunidades sostenibles al integrar a ciudadanos en procesos de aprendizaje permanente.'},
-      15:{t:'I',e:'Puede incluir contenidos sobre cuidado ambiental y sostenibilidad, dependiendo del enfoque del programa.'},
-      16:{t:'I',e:'Promueve participación ciudadana informada y construcción de ciudadanía democrática.'},
-      17:{t:'I',e:'Puede articularse con otras instituciones y sectores nacionales e internacionales para su implementación.'}
-    }
-  }
+/* Instruments with positions on outer ellipse */
+const INSTRUMENTS=[
+{id:'i0',short:'LGE',type:'ley',pos:{l:520,t:65},
+ fullName:'Ley General de Educación (Ley N.° 28044)',
+ ods:{1:{t:'I',e:'La ley plantea una política educativa que combate la desigualdad estructural mediante mecanismos de equidad, inclusión y universalización del acceso educativo. Estas acciones pueden contribuir a romper ciclos intergeneracionales de pobreza.'},2:{t:'I',e:'La Ley establece la provisión de programas complementarios de alimentación en la educación inicial y primaria, lo cual contribuye indirectamente a la seguridad alimentaria infantil.'},3:{t:'I',e:'Incluye la promoción del bienestar estudiantil a través de políticas de infraestructura, programas intersectoriales y educación en salud.'},4:{t:'D',e:'Es el núcleo de la ley. Establece principios, objetivos, estructura y funciones del sistema educativo peruano con un enfoque en calidad, equidad, inclusión y pertinencia, lo que se alinea plenamente con el ODS 4.'},5:{t:'I',e:'Se mencionan medidas específicas para reducir desigualdades, incluyendo el acceso y permanencia de niñas, adolescentes embarazadas y madres. Fomenta la equidad de género dentro del sistema educativo.'},8:{t:'I',e:'A través de la articulación entre educación y empleo, el fomento de competencias laborales, la formación técnica, y la colaboración con el sector productivo, la ley contribuye indirectamente al acceso a empleo decente.'},9:{t:'I',e:'Se promueve la investigación, la innovación educativa y la mejora de la infraestructura escolar como parte de los factores de calidad. Aunque no se enfoca en infraestructura productiva, hay un vínculo indirecto.'},10:{t:'D',e:'La ley define medidas concretas para compensar desigualdades por razones económicas, sociales, étnicas, de género y geográficas. Aplica acciones afirmativas y políticas educativas inclusivas orientadas a reducir brechas estructurales.'},11:{t:'I',e:'Mediante la participación social, la articulación con gobiernos locales y la promoción de entornos educativos seguros, se vincula indirectamente con el fortalecimiento del tejido comunitario y urbano.'},13:{t:'I',e:'El principio de conciencia ambiental promueve actitudes de respeto y cuidado del entorno natural, alineándose con una educación que sensibiliza frente al cambio climático.'},15:{t:'I',e:'Se promueve una conciencia ambiental general en el currículo y principios educativos, con posibles efectos positivos indirectos en la protección de ecosistemas terrestres.'},16:{t:'D',e:'La ley incorpora formación ética y cívica obligatoria, derechos humanos, fortalecimiento de la ciudadanía y cultura democrática. Todo esto se alinea directamente con la promoción de instituciones sólidas.'},17:{t:'D',e:'Plantea un enfoque explícito de articulación intersectorial entre Estado, sociedad civil, sector privado y cooperación internacional para el desarrollo del sistema educativo.'}}},
+{id:'i1',short:'Ley Univ.',type:'ley',pos:{l:325,t:91},
+ fullName:'Ley Universitaria (Ley N° 30220, mod. 2024)',
+ ods:{1:{t:'I',e:'Promueve la equidad educativa y el acceso a la educación superior, mejorando las oportunidades económicas a largo plazo.'},3:{t:'I',e:'Fomenta la investigación universitaria en salud y bienestar, mejorando la calidad de vida de las comunidades.'},4:{t:'D',e:'Establece estándares de calidad para la educación universitaria, asegurando formación inclusiva y de excelencia.'},5:{t:'D',e:'Garantiza igualdad de oportunidades en el acceso y permanencia en la universidad, especialmente para mujeres y grupos vulnerables.'},8:{t:'I',e:'Contribuye a la formación de profesionales altamente capacitados, promoviendo empleo decente y crecimiento económico.'},9:{t:'D',e:'Impulsa la investigación e innovación universitaria para fortalecer industrias e infraestructura tecnológica.'},10:{t:'D',e:'Promueve la equidad en el acceso a la educación superior, reduciendo brechas entre regiones y grupos sociales.'},11:{t:'I',e:'Contribuye al desarrollo sostenible mediante programas académicos y de investigación orientados a problemas urbanos.'},12:{t:'I',e:'Fomenta la investigación en sostenibilidad y producción responsable desde las universidades.'},13:{t:'I',e:'Estimula la investigación universitaria y formación profesional en cambio climático y sostenibilidad ambiental.'},14:{t:'I',e:'A través de investigaciones específicas en universidades relacionadas con biodiversidad marina y conservación.'},15:{t:'I',e:'Fortalece la investigación académica en conservación de ecosistemas terrestres y sostenibilidad ambiental.'},16:{t:'D',e:'Fortalece la gobernanza universitaria, promoviendo instituciones educativas transparentes, democráticas y sólidas.'},17:{t:'D',e:'Fomenta la cooperación interinstitucional e internacional para investigación y desarrollo educativo.'}}},
+{id:'i2',short:'PLANEA',type:'plan',pos:{l:715,t:91},
+ fullName:'Plan Nacional de Educación Ambiental 2017–2022 (PLANEA)',
+ ods:{1:{t:'I',e:'El PLANEA reconoce que la degradación ambiental afecta más intensamente a las poblaciones vulnerables y propone una educación ambiental que promueve la equidad, incidiendo indirectamente en la reducción de la pobreza.'},2:{t:'I',e:'A través de líneas de acción vinculadas a alimentación saludable, sostenibilidad y seguridad alimentaria en entornos escolares, el plan contribuye indirectamente a una cultura de prevención frente a la malnutrición.'},3:{t:'D',e:'El plan promueve directamente hábitos saludables, prevención de enfermedades, manejo responsable del agua y los residuos, así como la formación en salud ambiental.'},4:{t:'D',e:'PLANEA es un instrumento educativo que busca transversalizar el enfoque ambiental en todos los niveles del sistema educativo formal y no formal.'},5:{t:'I',e:'Incluye un enfoque de género explícito, reconociendo brechas y promoviendo la participación equitativa en el desarrollo sostenible.'},6:{t:'I',e:'Educa sobre el uso responsable y sostenible del agua, y promueve buenas prácticas en entornos escolares y comunitarios.'},7:{t:'I',e:'Fomenta la ecoeficiencia, el consumo responsable de recursos y la reducción de la huella de carbono.'},8:{t:'I',e:'El enfoque educativo incluye formación técnica con orientación ambiental y articulación con sectores productivos responsables.'},9:{t:'I',e:'Promueve el desarrollo de capacidades en investigación, innovación pedagógica y gestión institucional ecoeficiente.'},10:{t:'I',e:'El plan incorpora un enfoque intercultural y territorial, priorizando poblaciones vulnerables y promoviendo igualdad de oportunidades.'},11:{t:'D',e:'Propone una transformación cultural hacia comunidades ambientalmente responsables y trabaja articuladamente con gobiernos locales.'},12:{t:'D',e:'Uno de los ejes del PLANEA es modificar los patrones de consumo desde la educación ambiental, promoviendo las 3R y el manejo responsable de residuos.'},13:{t:'D',e:'El cambio climático es un eje transversal del plan. Promueve adaptación, mitigación, formación en riesgo climático y monitoreo participativo.'},14:{t:'I',e:'Se promueve la valoración de la biodiversidad y los ecosistemas marinos en actividades educativas, especialmente en regiones costeras.'},15:{t:'D',e:'El plan tiene un fuerte componente de conservación de la biodiversidad, defensa del patrimonio natural y valoración de saberes tradicionales vinculados a los ecosistemas terrestres.'},16:{t:'I',e:'Fomenta la participación ciudadana ambiental, el fortalecimiento de ciudadanía y la construcción de consensos sobre el entorno común.'},17:{t:'D',e:'El PLANEA se construye e implementa mediante alianzas entre el MINEDU, el MINAM, gobiernos regionales, cooperación internacional, empresas y sociedad civil.'}}},
+{id:'i3',short:'Plan EIB 2021',type:'plan',pos:{l:872,t:165},
+ fullName:'Plan Nacional de Educación Intercultural Bilingüe al 2021',
+ ods:{1:{t:'I',e:'La EIB combate desigualdades estructurales que afectan a la población indígena, mejorando las condiciones de acceso, permanencia y calidad educativa, contribuyendo a la superación de la pobreza.'},3:{t:'I',e:'La propuesta de EIB incorpora el bienestar integral como principio educativo e incluye elementos que promueven el desarrollo saludable de estudiantes indígenas.'},4:{t:'D',e:'El PLANEIB garantiza aprendizajes de calidad con pertinencia cultural y lingüística. Establece estándares, perfiles docentes, gestión educativa y materiales para una educación equitativa.'},5:{t:'D',e:'El plan incorpora la igualdad de género como componente transversal y propone acciones específicas para atender las brechas entre niñas y adolescentes indígenas.'},8:{t:'I',e:'El fortalecimiento de competencias educativas en contextos rurales y bilingües puede contribuir a mejorar las oportunidades laborales de estudiantes indígenas.'},9:{t:'I',e:'El plan promueve el fortalecimiento de redes educativas rurales, uso de TIC y mejora de infraestructura, contribuyendo a procesos de innovación educativa.'},10:{t:'D',e:'La EIB es una política de equidad estructural. Su foco es cerrar brechas históricas de acceso, permanencia, logro y participación de pueblos indígenas en el sistema educativo.'},11:{t:'I',e:'La EIB fortalece el tejido comunitario indígena al reconocer saberes locales y promover la gestión participativa de las escuelas.'},12:{t:'I',e:'La propuesta pedagógica intercultural reconoce y valoriza prácticas sostenibles de los pueblos originarios.'},13:{t:'I',e:'El plan incluye la recuperación de saberes indígenas sobre el territorio y el ambiente, que pueden fortalecer estrategias de adaptación climática.'},15:{t:'I',e:'A través del currículo y la valoración de los conocimientos tradicionales, el plan contribuye a la conservación de la biodiversidad desde una visión indígena.'},16:{t:'D',e:'El plan fue construido a través de procesos participativos y de consulta previa. Fomenta la ciudadanía intercultural y el fortalecimiento institucional.'},17:{t:'D',e:'El PLANEIB se implementa mediante alianzas entre el MINEDU, pueblos indígenas, organizaciones de sociedad civil y cooperación internacional.'}}},
+{id:'i4',short:'PNCTI 2006–2021',type:'plan',pos:{l:959,t:271},
+ fullName:'Plan Nacional Estratégico CTI 2006–2021',
+ ods:{1:{t:'I',e:'El plan plantea fortalecer capacidades humanas, institucionales y tecnológicas en regiones excluidas, promoviendo desarrollo económico local e inclusión productiva.'},2:{t:'I',e:'Se promueve la innovación tecnológica en sectores como agricultura y seguridad alimentaria, con énfasis en biotecnologías aplicadas a sistemas productivos rurales.'},3:{t:'I',e:'Fomenta el desarrollo científico en salud pública, biotecnología y nutrición.'},4:{t:'D',e:'Establece como prioridad el fortalecimiento de capacidades humanas en ciencia y tecnología mediante programas de formación y articulación entre academia, empresa y Estado.'},5:{t:'I',e:'El plan reconoce la necesidad de participación inclusiva en CTI, fomentando indirectamente la equidad en el acceso a formación e innovación científica y tecnológica.'},6:{t:'I',e:'Incluye la investigación en gestión de recursos hídricos y tecnologías limpias, así como el desarrollo de soluciones científicas para el saneamiento.'},7:{t:'I',e:'Promueve tecnologías limpias, innovación energética y biotecnologías aplicadas al uso eficiente de recursos.'},8:{t:'D',e:'El PNCTI busca aumentar la competitividad nacional mediante CTI, fortaleciendo capacidades laborales, tecnológicas y de innovación en sectores productivos estratégicos.'},9:{t:'D',e:'El plan está centrado en la promoción de la investigación aplicada, infraestructura científica y fortalecimiento de centros tecnológicos.'},10:{t:'I',e:'A través del enfoque territorial, se busca descentralizar la ciencia y tecnología, incorporando regiones históricamente excluidas del sistema de innovación.'},11:{t:'I',e:'El plan fomenta la investigación en urbanismo sostenible y gestión ambiental urbana.'},12:{t:'D',e:'Impulsa tecnologías limpias, ecoeficiencia y procesos productivos sostenibles desde la innovación.'},13:{t:'D',e:'El plan promueve investigación e innovación en mitigación y adaptación al cambio climático.'},14:{t:'I',e:'Contempla investigación en ciencias del mar y tecnologías pesqueras sostenibles.'},15:{t:'D',e:'Promueve la investigación científica en biodiversidad, manejo forestal y biotecnología.'},16:{t:'I',e:'Apuesta por una institucionalidad científica pública robusta con participación multisectorial.'},17:{t:'D',e:'El plan se construye desde una lógica de alianzas nacionales e internacionales entre Estado, sector privado, academia y cooperación internacional.'}}},
+{id:'i5',short:'PNESTP',type:'politica',pos:{l:959,t:389},
+ fullName:'Política Nacional de Educación Superior y Técnico-Productiva',
+ ods:{1:{t:'I',e:'La educación técnico-productiva mejora la empleabilidad y reduce la pobreza al brindar herramientas para acceder a trabajos mejor remunerados.'},2:{t:'I',e:'Contribuye indirectamente al fortalecer habilidades que mejoran la productividad agrícola y cadenas alimentarias.'},4:{t:'D',e:'Es directamente relevante para este ODS al mejorar la calidad, pertinencia y acceso a la educación superior y técnica, promoviendo aprendizaje inclusivo.'},5:{t:'I',e:'Promueve la igualdad al ofrecer acceso equitativo a mujeres y hombres en programas de educación técnica y superior.'},8:{t:'D',e:'Fomenta el trabajo decente y el crecimiento económico al capacitar personas en habilidades técnicas y profesionales necesarias para sectores productivos.'},9:{t:'D',e:'La formación técnica aporta recursos humanos capacitados para sectores industriales y fomenta la innovación mediante investigación aplicada.'},10:{t:'I',e:'Reduce desigualdades al proporcionar educación accesible para poblaciones desfavorecidas, especialmente en zonas rurales o vulnerables.'},11:{t:'I',e:'Apoya la sostenibilidad urbana al formar profesionales que pueden implementar soluciones técnicas en vivienda, transporte y planificación urbana.'},13:{t:'I',e:'La formación en temas técnicos puede incluir habilidades para desarrollar soluciones de mitigación y adaptación al cambio climático.'},17:{t:'D',e:'Fomenta alianzas entre instituciones educativas, sectores productivos y gobiernos para desarrollar programas de educación técnica pertinente.'}}},
+{id:'i6',short:'Política Inglés 2021',type:'politica',pos:{l:872,t:495},
+ fullName:'Política Nacional de Enseñanza del Inglés al 2021',
+ ods:{1:{t:'I',e:'La política promueve el acceso a oportunidades educativas y laborales mediante el dominio del idioma inglés, contribuyendo indirectamente a mejorar la empleabilidad y reducir condiciones estructurales de pobreza.'},3:{t:'I',e:'La política incorpora elementos de bienestar ligados al desarrollo personal y profesional, y al fortalecimiento del capital humano.'},4:{t:'D',e:'La política busca mejorar la calidad del aprendizaje del inglés en todos los niveles educativos, con énfasis en estándares internacionales, fortalecimiento docente y formación continua.'},5:{t:'I',e:'La política promueve el acceso igualitario a la enseñanza del inglés en la educación básica, superior y en el trabajo.'},8:{t:'D',e:'Busca fortalecer competencias lingüísticas en la población trabajadora para mejorar su empleabilidad y productividad.'},9:{t:'I',e:'A través del eje de competitividad, se promueve el acceso al desarrollo científico y la internacionalización de empresas.'},10:{t:'I',e:'Al buscar cerrar brechas educativas en escuelas públicas y sectores vulnerables, puede contribuir a reducir desigualdades.'},16:{t:'I',e:'La política promueve la articulación intersectorial e intergubernamental y el fortalecimiento de capacidades del Estado.'},17:{t:'D',e:'La política se implementa a través de una Comisión Multisectorial permanente que involucra múltiples ministerios y cooperación internacional.'}}},
+{id:'i7',short:'PNLOTI',type:'politica',pos:{l:715,t:569},
+ fullName:'Política Nacional de Lenguas Originarias, Tradición Oral e Interculturalidad',
+ ods:{1:{t:'I',e:'Promueve la inclusión social y cultural de pueblos originarios, favoreciendo su desarrollo económico.'},4:{t:'D',e:'Fomenta la educación intercultural bilingüe, mejorando el acceso a una educación inclusiva y de calidad.'},5:{t:'I',e:'Contribuye a la igualdad de género al empoderar a las mujeres de pueblos originarios.'},8:{t:'I',e:'Potencia el desarrollo de capacidades y habilidades en lenguas originarias, abriendo oportunidades laborales.'},9:{t:'I',e:'Promueve la innovación en la preservación y enseñanza de lenguas y tradiciones.'},10:{t:'D',e:'Reduce las desigualdades sociales y culturales, promoviendo la inclusión de las lenguas originarias.'},15:{t:'I',e:'Contribuye a la preservación de culturas indígenas que están intrínsecamente conectadas con la conservación del medio ambiente.'},16:{t:'I',e:'Fortalece la justicia cultural e impulsa la protección de los derechos de los pueblos originarios.'},17:{t:'I',e:'Fomenta alianzas con instituciones que apoyan la diversidad lingüística y cultural.'}}},
+{id:'i8',short:'Wasi Mikuna',type:'programa',pos:{l:520,t:595},
+ fullName:'Programa de Alimentación Escolar Wasi Mikuna (ex Qali Warmi)',
+ ods:{1:{t:'I',e:'Mejora la seguridad alimentaria de niños en situación de pobreza, reduciendo vulnerabilidades económicas en sus familias.'},2:{t:'D',e:'Proporciona acceso a alimentos nutritivos a estudiantes, combatiendo el hambre y la desnutrición infantil.'},3:{t:'D',e:'Mejora la salud infantil al garantizar una alimentación balanceada que contribuye al desarrollo físico y mental.'},4:{t:'I',e:'Contribuye al aprendizaje efectivo al mejorar la nutrición de los estudiantes, lo que impacta positivamente en su rendimiento académico.'},5:{t:'I',e:'Al brindar alimentación escolar, promueve la equidad de acceso a la educación, especialmente para niñas en comunidades vulnerables.'},8:{t:'I',e:'Al fortalecer cadenas productivas locales para el abastecimiento de alimentos, apoya el crecimiento económico y el empleo en las comunidades.'},10:{t:'D',e:'Reduce desigualdades al garantizar acceso equitativo a la alimentación para niños de zonas rurales y urbanas vulnerables.'},12:{t:'I',e:'Promueve prácticas sostenibles al adquirir alimentos de pequeños productores y cadenas de suministro responsables.'},15:{t:'I',e:'Puede fomentar el uso sostenible de recursos agrícolas al adquirir productos de agricultores locales bajo prácticas responsables.'},17:{t:'D',e:'Fortalece alianzas público-privadas y comunitarias para implementar el programa, involucrando a gobiernos locales, comunidades y proveedores.'}}},
+{id:'i9',short:'PNA',type:'programa',pos:{l:325,t:569},
+ fullName:'Programa Nacional de Alfabetización',
+ ods:{1:{t:'I',e:'Contribuye a reducir la pobreza al mejorar las oportunidades económicas de personas alfabetizadas.'},2:{t:'I',e:'Personas alfabetizadas pueden acceder mejor a información sobre nutrición y seguridad alimentaria.'},3:{t:'I',e:'La alfabetización favorece el acceso a información sobre salud, higiene y bienestar.'},4:{t:'D',e:'El objetivo principal del programa es garantizar el derecho a la educación a personas jóvenes y adultas.'},5:{t:'I',e:'Favorece el empoderamiento de mujeres, especialmente en zonas donde el analfabetismo afecta más a ellas.'},8:{t:'I',e:'La alfabetización mejora la empleabilidad, especialmente en sectores informales.'},10:{t:'D',e:'Reduce desigualdades educativas entre población alfabetizada y analfabeta.'},11:{t:'I',e:'Fortalece comunidades sostenibles al integrar a ciudadanos en procesos de aprendizaje permanente.'},15:{t:'I',e:'Puede incluir contenidos sobre cuidado ambiental y sostenibilidad, dependiendo del enfoque del programa.'},16:{t:'I',e:'Promueve participación ciudadana informada y construcción de ciudadanía democrática.'},17:{t:'I',e:'Puede articularse con otras instituciones y sectores para su implementación.'}}},
+{id:'i10',short:'PRONABEC',type:'programa',pos:{l:168,t:495},
+ fullName:'Programa Nacional de Becas y Crédito Educativo (PRONABEC)',
+ ods:{1:{t:'D',e:'Brinda acceso a educación superior a personas de bajos recursos, promoviendo movilidad social.'},3:{t:'I',e:'Mejora condiciones de vida, impactando positivamente en la salud.'},4:{t:'D',e:'Facilita el acceso y permanencia en educación superior para poblaciones vulnerables.'},5:{t:'I',e:'Contribuye a cerrar brechas de género en educación superior.'},8:{t:'D',e:'Mejora competencias laborales y empleabilidad de jóvenes profesionales.'},9:{t:'I',e:'Forma capital humano calificado que puede impulsar innovación.'},10:{t:'D',e:'Reduce desigualdades sociales y territoriales en acceso a educación superior.'},16:{t:'I',e:'Fomenta ciudadanía informada y confianza en instituciones.'},17:{t:'I',e:'Colabora con instituciones educativas y actores internacionales.'}}},
+{id:'i11',short:'Formación Docente',type:'programa',pos:{l:81,t:389},
+ fullName:'Programa Nacional de Formación Docente en Servicio',
+ ods:{1:{t:'I',e:'Mejora la calidad educativa, contribuyendo a reducir la pobreza a largo plazo al incrementar las oportunidades para los estudiantes.'},3:{t:'I',e:'La formación docente incluye temas de bienestar emocional y salud, que pueden impactar positivamente en la comunidad educativa.'},4:{t:'D',e:'Fortalece las capacidades docentes, asegurando educación inclusiva, equitativa y de calidad para los estudiantes.'},5:{t:'D',e:'Promueve la equidad en la educación, abordando estereotipos de género a través de la formación docente.'},8:{t:'I',e:'Mejora la calidad del trabajo docente al brindar herramientas y capacitación para su desarrollo profesional.'},10:{t:'I',e:'Reduce desigualdades educativas al capacitar a docentes en contextos rurales y urbanos vulnerables.'},13:{t:'I',e:'Incluye formación sobre sostenibilidad ambiental y educación climática, fortaleciendo la acción por el clima.'},15:{t:'I',e:'Capacita a docentes en temas ambientales, contribuyendo al conocimiento y la conservación de ecosistemas terrestres.'},16:{t:'I',e:'Fomenta instituciones educativas sólidas al mejorar la calidad docente y promover valores democráticos.'},17:{t:'D',e:'Fortalece alianzas con universidades, gobiernos locales y organismos internacionales para implementar el programa.'}}},
+{id:'i12',short:'PNIE al 2025',type:'programa',pos:{l:81,t:271},
+ fullName:'Programa Nacional de Infraestructura Educativa al 2025',
+ ods:{1:{t:'I',e:'La mejora educativa puede reducir la pobreza a largo plazo.'},3:{t:'I',e:'Infraestructura adecuada mejora la salud escolar y el bienestar de los estudiantes.'},4:{t:'D',e:'Mejora directa del acceso y la calidad educativa mediante la construcción y rehabilitación de infraestructura.'},5:{t:'I',e:'Infraestructura adecuada promueve la asistencia y permanencia femenina en el sistema educativo.'},6:{t:'I',e:'Incluye acceso a agua y saneamiento en las escuelas como criterio de calidad.'},8:{t:'I',e:'Genera empleo en la construcción e incrementa el capital humano.'},9:{t:'D',e:'Desarrollo de infraestructura educativa pública como bien de uso colectivo.'},10:{t:'I',e:'Reduce brechas educativas en poblaciones vulnerables mediante acceso a mejores instalaciones.'},11:{t:'I',e:'Aporta al desarrollo urbano y comunitario mediante infraestructura educativa de calidad.'},13:{t:'I',e:'Puede incorporar criterios de sostenibilidad ambiental y eficiencia energética en la construcción.'},16:{t:'I',e:'Fortalece la institucionalidad educativa pública y su presencia territorial.'},17:{t:'I',e:'Puede requerir alianzas público-privadas e internacionales para su financiamiento.'}}},
+{id:'i13',short:'Ed. Rural',type:'servicio',pos:{l:168,t:165},
+ fullName:'Servicios de Educación Rural',
+ ods:{1:{t:'I',e:'Mejorar el acceso a educación rural contribuye a romper ciclos de pobreza al aumentar las oportunidades económicas futuras.'},2:{t:'I',e:'La educación rural puede incluir contenidos sobre seguridad alimentaria y prácticas agrícolas sostenibles.'},3:{t:'I',e:'La educación puede mejorar prácticas de higiene, salud y bienestar en comunidades rurales.'},4:{t:'D',e:'Es el núcleo del servicio: mejorar el acceso, equidad y calidad educativa en zonas rurales.'},5:{t:'I',e:'Ampliar servicios educativos en zonas rurales puede reducir brechas de género en acceso a educación de niñas.'},8:{t:'I',e:'La educación mejora la empleabilidad y productividad de jóvenes rurales a largo plazo.'},9:{t:'I',e:'El despliegue de servicios educativos puede requerir infraestructura como aulas, caminos y conectividad.'},10:{t:'D',e:'Busca disminuir las brechas educativas entre zonas urbanas y rurales, clave para reducir desigualdades.'},11:{t:'I',e:'Contribuye a fortalecer comunidades sostenibles al empoderar a sus miembros mediante educación.'},15:{t:'I',e:'En zonas rurales, la educación puede incluir contenidos de conservación del entorno natural y prácticas sostenibles.'},16:{t:'I',e:'Fortalecer la educación promueve ciudadanía activa y el respeto por los derechos, incluso en comunidades rurales.'},17:{t:'I',e:'El desarrollo de la política educativa rural puede requerir alianzas con gobiernos locales, ONG y cooperación internacional.'}}}
 ];
 
-/* SDG → instruments reverse mapping */
-const SDG_TO_INSTRS = {};
-for(let o=1;o<=17;o++) SDG_TO_INSTRS[o] = [];
-INSTRUMENTS.forEach(instr => {
-  Object.keys(instr.ods).forEach(o => SDG_TO_INSTRS[+o].push(instr.id));
-});
+/* Build reverse map */
+const SDG_TO_INSTRS={};
+for(let o=1;o<=17;o++) SDG_TO_INSTRS[o]=[];
+INSTRUMENTS.forEach(ins=>Object.keys(ins.ods).forEach(o=>SDG_TO_INSTRS[+o].push(ins.id)));
 
-/* Type colors */
-const TYPE_COLORS = {ley:'#922b3e',plan:'#1a5c2a',politica:'#1a3a7a',programa:'#6b1530',servicio:'#4a1a7a'};
+function getType(name){
+  if(name.includes('LGE')||name.includes('Univ')||name.includes('Ley')) return 'ley';
+  if(name.includes('Plan')||name.includes('PLANEA')||name.includes('EIB')||name.includes('CTI')) return 'plan';
+  if(name.includes('Política')||name.includes('Inglés')||name.includes('PNESTP')||name.includes('PNLOTI')) return 'politica';
+  if(name.includes('Programa')||name.includes('Wasi')||name.includes('Formación')||name.includes('PRONABEC')||name.includes('Infraestructura')||name.includes('Alfabetización')) return 'programa';
+  return 'servicio';
+}
 
-/* ════════════════════════════════════════
-   BUILD RINGS
-════════════════════════════════════════ */
-function buildRings(){
-  const instrRing = document.getElementById('instrRing');
-  const sdgRing   = document.getElementById('sdgRing');
+/* ════════════════════════════════
+   VIEW TOGGLE
+════════════════════════════════ */
+let currentView='matrix';
+function setView(v){
+  currentView=v;
+  document.getElementById('viewMatrix').style.display = v==='matrix'?'block':'none';
+  document.getElementById('viewCircular').style.display = v==='circular'?'block':'none';
+  document.getElementById('btnMatrix').className='vt-btn'+(v==='matrix'?' active':'');
+  document.getElementById('btnCircular').className='vt-btn'+(v==='circular'?' active':'');
+  if(v==='circular' && !circBuilt) buildCircular();
+}
 
-  /* Outer ring: instruments */
-  INSTRUMENTS.forEach(instr => {
-    const targets = Object.keys(instr.ods).map(o=>'sdg'+o).join(' ');
-    const li = document.createElement('li');
-    li.id = instr.id;
-    li.className = 'instr-item ' + instr.type;
-    li.dataset.targets = targets;
-    li.dataset.type = 'instr';
-    li.style.left = instr.pos.l+'px';
-    li.style.top  = instr.pos.t+'px';
-    li.innerHTML = `<span class="instr-code">${instr.code}</span><span class="instr-type-tag">${instr.typeLabel}</span>`;
-    instrRing.appendChild(li);
+/* ════════════════════════════════
+   FILTER
+════════════════════════════════ */
+let activeFilter='all';
+function setFilter(f,btn){
+  activeFilter=f;
+  document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+}
+function applyFilter(){
+  document.querySelectorAll('.data-cell').forEach(cell=>{
+    const rel=cell.dataset.rel; // 'D','I','N'
+    let show=true;
+    if(activeFilter==='direct') show=rel==='D';
+    else if(activeFilter==='indirect') show=rel==='I';
+    else if(activeFilter==='none') show=rel==='N';
+    cell.classList.toggle('dimmed', !show);
   });
+}
 
-  /* Inner ring: ODS */
+/* ════════════════════════════════
+   BUILD MATRIX TABLE
+════════════════════════════════ */
+function buildMatrix(){
+  const thead=document.getElementById('matrizThead');
+  const tbody=document.getElementById('matrizTbody');
+
+  // Header
+  let hr='<tr><th>Instrumento</th>';
   for(let o=1;o<=17;o++){
-    const targets = SDG_TO_INSTRS[o].join(' ');
-    const li = document.createElement('li');
-    li.id = 'sdg'+o;
-    li.className = 'sdg-item';
-    li.dataset.targets = targets;
-    li.dataset.type = 'sdg';
-    li.dataset.ods  = o;
-    li.style.left = SDG_POS[o].l+'px';
-    li.style.top  = SDG_POS[o].t+'px';
-    li.innerHTML = `<img src="${ODS_ICON(o)}" alt="ODS ${o}" loading="lazy">`;
-    sdgRing.appendChild(li);
+    hr+=`<th class="ods-th" id="odsTh${o}" title="ODS ${o}: ${ODS_NAMES[o]}" onclick="clickODS(${o})">
+      <div><img src="${ODS_ICON(o)}" alt="ODS ${o}" loading="lazy"><div class="ods-num">${o}</div></div>
+    </th>`;
   }
+  hr+='</tr>';
+  thead.innerHTML=hr;
+
+  // Body
+  let body='';
+  INSTRUMENTS.forEach(ins=>{
+    const tc=TYPE_COLORS[ins.type];
+    const tl=TYPE_LABELS[ins.type];
+    body+=`<tr data-instr="${ins.id}">
+      <td class="instr-cell" onclick="clickInstr('${ins.id}')" title="${ins.fullName}">
+        <span class="instr-tag tag-${ins.type}">${tl}</span>
+        <span class="instr-short">${ins.short}</span>
+        <span class="instr-full">${ins.fullName}</span>
+      </td>`;
+    for(let o=1;o<=17;o++){
+      const rel=ins.ods[o];
+      const relCode=rel?(rel.t==='D'?'D':'I'):'N';
+      const dotClass=rel?(rel.t==='D'?'dot-direct':'dot-indirect'):'dot-none';
+      body+=`<td class="data-cell" data-instr="${ins.id}" data-ods="${o}" data-rel="${relCode}"
+        onclick="clickCell('${ins.id}',${o})"
+        onmouseenter="hlCross(this)" onmouseleave="unhlCross()">
+        <div class="cell-dot ${dotClass}"></div>
+      </td>`;
+    }
+    body+='</tr>';
+  });
+  tbody.innerHTML=body;
 }
 
-/* ════════════════════════════════════════
-   CONNECTION LINES
-════════════════════════════════════════ */
-const svg = document.getElementById('linesSvg');
-
-function centerOf(el){
-  return {
-    x: parseFloat(el.style.left)+40,
-    y: parseFloat(el.style.top)+40
-  };
-}
-
-function drawLines(fromEl, targets, instrData){
-  clearLines();
-  const from = centerOf(fromEl);
-  targets.forEach(targetId=>{
-    const toEl = document.getElementById(targetId);
-    if(!toEl) return;
-    const to = centerOf(toEl);
-
-    /* Get relation type */
-    let tipo = 'I';
-    if(instrData){
-      const odsNum = +targetId.replace('sdg','');
-      if(instrData.ods[odsNum]) tipo = instrData.ods[odsNum].t;
-    } else {
-      // hovering ODS → find relation from first connected instrument (approximation)
-      const instrId = fromEl.dataset.targets.split(' ')[0]; // just for line color logic
-      const instr = INSTRUMENTS.find(i=>i.id===targetId);
-      if(instr){ /* can't determine type easily, use default */ }
-    }
-
-    const color = tipo==='D' ? '#22c55e' : '#3b82f6';
-    const dash  = tipo==='D' ? '' : '6,4';
-
-    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1', from.x);
-    line.setAttribute('y1', from.y);
-    line.setAttribute('x2', to.x);
-    line.setAttribute('y2', to.y);
-    line.setAttribute('stroke', color);
-    line.setAttribute('stroke-width','1.8');
-    line.setAttribute('stroke-opacity','0.75');
-    if(dash) line.setAttribute('stroke-dasharray',dash);
-
-    /* Animate dash */
-    const len = Math.hypot(to.x-from.x, to.y-from.y);
-    line.style.strokeDashoffset = len;
-    line.style.transition = 'stroke-dashoffset .4s ease';
-    if(!dash){
-      line.setAttribute('stroke-dasharray', len);
-      setTimeout(()=>line.style.strokeDashoffset=0, 20);
-    }
-
-    svg.appendChild(line);
+/* ════════════════════════════════
+   MATRIX HOVER HIGHLIGHT
+════════════════════════════════ */
+function hlCross(cell){
+  const instrId=cell.dataset.instr;
+  const odsN=+cell.dataset.ods;
+  // col
+  document.querySelectorAll('.ods-th').forEach((th,i)=>{
+    th.classList.toggle('col-hl', i+1===odsN);
+  });
+  document.querySelectorAll('.data-cell').forEach(c=>{
+    c.classList.toggle('col-hl', +c.dataset.ods===odsN);
+    c.classList.toggle('row-hl', c.dataset.instr===instrId);
   });
 }
+function unhlCross(){
+  document.querySelectorAll('.col-hl,.row-hl').forEach(e=>e.classList.remove('col-hl','row-hl'));
+}
 
-/* Draw lines when hovering ODS → we need to color by each instrument's relation */
-function drawLinesFromSdg(fromEl, odsNum){
-  clearLines();
-  const from = centerOf(fromEl);
-  SDG_TO_INSTRS[odsNum].forEach(instrId=>{
-    const toEl = document.getElementById(instrId);
-    if(!toEl) return;
-    const instr = INSTRUMENTS.find(i=>i.id===instrId);
-    const tipo = instr?.ods[odsNum]?.t || 'I';
-    const color = tipo==='D' ? '#22c55e' : '#3b82f6';
-    const dash  = tipo==='D' ? '' : '6,4';
-    const to = centerOf(toEl);
+/* ════════════════════════════════
+   POPUP LOGIC
+════════════════════════════════ */
+function clickCell(instrId, odsNum){
+  const ins=INSTRUMENTS.find(x=>x.id===instrId);
+  const rel=ins.ods[odsNum];
+  if(!rel){
+    /* No relation — show simple popup */
+    showSimplePopup(ins, odsNum);
+    return;
+  }
+  showCellPopup(ins, odsNum, rel);
+}
 
-    const len = Math.hypot(to.x-from.x, to.y-from.y);
-    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1', from.x); line.setAttribute('y1', from.y);
-    line.setAttribute('x2', to.x);   line.setAttribute('y2', to.y);
-    line.setAttribute('stroke', color);
-    line.setAttribute('stroke-width','1.8');
-    line.setAttribute('stroke-opacity','0.75');
-    if(dash) line.setAttribute('stroke-dasharray', dash);
-    else {
-      line.setAttribute('stroke-dasharray', len);
-      line.style.strokeDashoffset = len;
-      line.style.transition = 'stroke-dashoffset .4s ease';
-      setTimeout(()=>line.style.strokeDashoffset=0, 20);
-    }
-    svg.appendChild(line);
+function showCellPopup(ins, odsNum, rel){
+  const isD=rel.t==='D';
+  const borderColor=isD?'var(--c-direct)':'var(--c-indirect)';
+  const tc=TYPE_COLORS[ins.type];
+  const tl=TYPE_LABELS[ins.type];
+  document.getElementById('popupContent').innerHTML=`
+    <div class="popup-header">
+      <div class="popup-icon-instr" style="background:${tc}">
+        <span class="pi-code">${ins.short.substring(0,6)}</span>
+        <span class="pi-tag">${tl}</span>
+      </div>
+      <div style="flex:1">
+        <div class="popup-title">${ins.short}</div>
+        <div class="popup-subtitle">${ins.fullName}</div>
+      </div>
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;padding:14px;border-radius:var(--radius-md);background:${isD?'var(--c-direct-bg)':'var(--c-indirect-bg)'};margin-bottom:14px">
+      <img src="${ODS_ICON(odsNum)}" style="width:52px;height:52px;border-radius:8px;flex-shrink:0" alt="ODS ${odsNum}">
+      <div>
+        <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:${isD?'var(--c-direct-text)':'var(--c-indirect-text)'};margin-bottom:2px">ODS ${odsNum} — Relación ${isD?'Directa':'Indirecta'}</div>
+        <div style="font-size:.82rem;font-weight:600;color:var(--c-header)">${ODS_NAMES[odsNum]}</div>
+      </div>
+    </div>
+    <p style="font-size:.8rem;color:#374151;line-height:1.65;margin-bottom:18px">${rel.e}</p>
+    <button class="popup-ver-mas" onclick="openDetailFromPopup('${ins.id}')">
+      Ver todas las vinculaciones de ${ins.short}
+      <svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 10.5l-5-5h10z"/></svg>
+    </button>`;
+  showPopup();
+}
+
+function showSimplePopup(ins, odsNum){
+  const tc=TYPE_COLORS[ins.type];
+  const tl=TYPE_LABELS[ins.type];
+  document.getElementById('popupContent').innerHTML=`
+    <div class="popup-header">
+      <div class="popup-icon-instr" style="background:${tc}">
+        <span class="pi-code">${ins.short.substring(0,6)}</span>
+        <span class="pi-tag">${tl}</span>
+      </div>
+      <div style="flex:1">
+        <div class="popup-title">${ins.short}</div>
+        <div class="popup-subtitle">${ins.fullName}</div>
+      </div>
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--c-none-bg);border-radius:var(--radius-md);margin-bottom:16px">
+      <img src="${ODS_ICON(odsNum)}" style="width:44px;height:44px;border-radius:6px;flex-shrink:0" alt="ODS ${odsNum}">
+      <div>
+        <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;color:var(--c-none-text);letter-spacing:.06em;margin-bottom:2px">Sin relación identificada</div>
+        <div style="font-size:.8rem;color:var(--c-header);font-weight:600">ODS ${odsNum}: ${ODS_NAMES[odsNum]}</div>
+      </div>
+    </div>
+    <button class="popup-ver-mas" onclick="openDetailFromPopup('${ins.id}')">
+      Ver todas las vinculaciones de ${ins.short}
+      <svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 10.5l-5-5h10z"/></svg>
+    </button>`;
+  showPopup();
+}
+
+function clickInstr(instrId){
+  const ins=INSTRUMENTS.find(x=>x.id===instrId);
+  const tc=TYPE_COLORS[ins.type];
+  const tl=TYPE_LABELS[ins.type];
+  const dCount=Object.values(ins.ods).filter(r=>r.t==='D').length;
+  const iCount=Object.values(ins.ods).filter(r=>r.t==='I').length;
+  const nCount=17-dCount-iCount;
+
+  let tiles='';
+  for(let o=1;o<=17;o++){
+    const rel=ins.ods[o];
+    const isD=rel&&rel.t==='D', isI=rel&&rel.t==='I';
+    const borderCls=isD?'rel-direct':isI?'rel-indirect':'rel-none';
+    const corner=isD?'<div class="rel-corner"></div>':isI?'<div class="rel-corner rc-indirect"></div>':'';
+    tiles+=`<div class="popup-tile ${borderCls}" title="ODS ${o}: ${ODS_NAMES[o]}">${corner}<img src="${ODS_ICON(o)}" alt="ODS ${o}" loading="lazy"></div>`;
+  }
+
+  document.getElementById('popupContent').innerHTML=`
+    <div class="popup-header">
+      <div class="popup-icon-instr" style="background:${tc}">
+        <span class="pi-code">${ins.short.substring(0,6)}</span><span class="pi-tag">${tl}</span>
+      </div>
+      <div style="flex:1">
+        <div class="popup-title">${ins.short}</div>
+        <div class="popup-subtitle">${ins.fullName}</div>
+      </div>
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+    <div class="popup-summary">
+      <span class="ps-badge ps-direct">✦ ${dCount} directas</span>
+      <span class="ps-badge ps-indirect">◎ ${iCount} indirectas</span>
+      <span class="ps-badge ps-none">✗ ${nCount} sin relación</span>
+    </div>
+    <div style="font-size:.7rem;color:var(--c-muted);margin-bottom:10px;display:flex;gap:12px">
+      <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c-direct)"></span>Directa</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c-indirect)"></span>Indirecta</span>
+      <span style="display:flex;align-items:center;gap:5px;opacity:.5"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c-none)"></span>Sin relación</span>
+    </div>
+    <div class="popup-grid">${tiles}</div>
+    <button class="popup-ver-mas" onclick="openDetailFromPopup('${ins.id}')">
+      Ver detalle completo
+      <svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 10.5l-5-5h10z"/></svg>
+    </button>`;
+  showPopup();
+}
+
+function clickODS(odsNum){
+  const instrIds=SDG_TO_INSTRS[odsNum];
+  const dCount=instrIds.filter(id=>{const ins=INSTRUMENTS.find(x=>x.id===id);return ins?.ods[odsNum]?.t==='D'}).length;
+  const iCount=instrIds.filter(id=>{const ins=INSTRUMENTS.find(x=>x.id===id);return ins?.ods[odsNum]?.t==='I'}).length;
+  const nCount=INSTRUMENTS.length-instrIds.length;
+
+  let tiles='';
+  INSTRUMENTS.forEach(ins=>{
+    const rel=ins.ods[odsNum];
+    const isD=rel&&rel.t==='D', isI=rel&&rel.t==='I';
+    const borderCls=isD?'rel-direct':isI?'rel-indirect':'rel-none';
+    const tc=TYPE_COLORS[ins.type];
+    tiles+=`<div class="popup-tile-instr ${borderCls}" style="background:${tc}" title="${ins.fullName}">
+      <span class="pt-code">${ins.short.substring(0,8)}</span>
+      <span class="pt-label">${TYPE_LABELS[ins.type]}</span>
+    </div>`;
   });
+
+  document.getElementById('popupContent').innerHTML=`
+    <div class="popup-header">
+      <img class="popup-icon" src="${ODS_ICON(odsNum)}" alt="ODS ${odsNum}">
+      <div style="flex:1">
+        <div class="popup-title">ODS ${odsNum}</div>
+        <div class="popup-subtitle">${ODS_NAMES[odsNum]}</div>
+      </div>
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+    <div class="popup-summary">
+      <span class="ps-badge ps-direct">✦ ${dCount} directas</span>
+      <span class="ps-badge ps-indirect">◎ ${iCount} indirectas</span>
+      <span class="ps-badge ps-none">✗ ${nCount} sin relación</span>
+    </div>
+    <div style="font-size:.7rem;color:var(--c-muted);margin-bottom:10px;display:flex;gap:12px">
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c-direct);display:inline-block"></span>Directa</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c-indirect);display:inline-block"></span>Indirecta</span>
+      <span style="display:flex;align-items:center;gap:5px;opacity:.5"><span style="width:10px;height:10px;border-radius:50%;background:var(--c-none);display:inline-block"></span>Sin relación</span>
+    </div>
+    <div class="popup-grid">${tiles}</div>
+    <button class="popup-ver-mas" onclick="openDetailFromPopup(null,${odsNum})">
+      Ver detalle completo
+      <svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 10.5l-5-5h10z"/></svg>
+    </button>`;
+  showPopup();
 }
 
-function clearLines(){
-  while(svg.lastChild && svg.lastChild.tagName!=='defs') svg.removeChild(svg.lastChild);
+function showPopup(){
+  document.getElementById('popupOverlay').classList.add('show');
+}
+function closePopup(){
+  document.getElementById('popupOverlay').classList.remove('show');
+}
+function closePopupClick(e){
+  if(e.target===document.getElementById('popupOverlay')) closePopup();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePopup();closeDetail()}});
+
+/* ════════════════════════════════
+   DETAIL PANEL
+════════════════════════════════ */
+let dpFilter='all';
+
+function openDetailFromPopup(instrId, odsNum){
+  closePopup();
+  if(instrId) showDetailInstr(instrId);
+  else showDetailODS(odsNum);
 }
 
-/* ════════════════════════════════════════
-   HOVER INTERACTION
-════════════════════════════════════════ */
-const caption = document.getElementById('caption');
-const capTitle = document.getElementById('capTitle');
-const capSub   = document.getElementById('capSub');
+function showDetailInstr(instrId){
+  const ins=INSTRUMENTS.find(x=>x.id===instrId);
+  const tc=TYPE_COLORS[ins.type];
+  const tl=TYPE_LABELS[ins.type];
+  const allOds=[];
+  for(let o=1;o<=17;o++){
+    const rel=ins.ods[o];
+    allOds.push({o,rel,tipo:rel?(rel.t==='D'?'D':'I'):'N',e:rel?rel.e:null});
+  }
+  const dC=allOds.filter(x=>x.tipo==='D').length;
+  const iC=allOds.filter(x=>x.tipo==='I').length;
+  const nC=allOds.filter(x=>x.tipo==='N').length;
 
-function showCaption(el, title, sub){
-  const l = parseFloat(el.style.left);
-  const t = parseFloat(el.style.top);
-  let cx = l + 40;
-  let cy = t - 8;
-  /* Position above or below based on vertical position */
-  if(cy < 30) cy = t + 88;
-  caption.style.left = (cx - 110) + 'px';
-  caption.style.top  = cy + 'px';
-  capTitle.textContent = title;
-  capSub.textContent   = sub || '';
-  caption.classList.add('visible');
-}
-function hideCaption(){ caption.classList.remove('visible'); }
-
-function attachHover(li, allRings, instrData, isSDG, odsNum){
-  li.addEventListener('mouseenter',()=>{
-    /* Dim all */
-    allRings.forEach(ul => ul.classList.add('highlighting'));
-
-    /* Highlight this item */
-    li.classList.add('highlighted');
-
-    /* Highlight targets with link type classes */
-    const targets = (li.dataset.targets||'').split(' ').filter(Boolean);
-    targets.forEach(tid=>{
-      const tel = document.getElementById(tid);
-      if(!tel) return;
-      tel.classList.add('highlighted');
-
-      /* Add relation type class for border glow */
-      let tipo='I';
-      if(instrData){
-        const on = +tid.replace('sdg','');
-        tipo = instrData.ods[on]?.t || 'I';
-      } else if(isSDG){
-        const instr = INSTRUMENTS.find(i=>i.id===tid);
-        tipo = instr?.ods[odsNum]?.t || 'I';
-      }
-      tel.classList.add(tipo==='D' ? 'link-directa' : 'link-indirecta');
-    });
-
-    /* Draw lines */
-    if(!isSDG && instrData) drawLines(li, targets, instrData);
-    else if(isSDG) drawLinesFromSdg(li, odsNum);
-
-    /* Caption */
-    if(!isSDG && instrData){
-      const d = Object.values(instrData.ods).filter(r=>r.t==='D').length;
-      const i = Object.values(instrData.ods).filter(r=>r.t==='I').length;
-      showCaption(li, instrData.fullName, `${d} directas · ${i} indirectas`);
-    } else if(isSDG){
-      const d = SDG_TO_INSTRS[odsNum].filter(id=>{
-        const instr=INSTRUMENTS.find(x=>x.id===id);
-        return instr?.ods[odsNum]?.t==='D';
-      }).length;
-      const tot = SDG_TO_INSTRS[odsNum].length;
-      showCaption(li, `ODS ${odsNum}: ${ODS_NAMES[odsNum]}`, `${tot} instrumentos · ${d} directas`);
-    }
-  });
-
-  li.addEventListener('mouseleave',()=>{
-    allRings.forEach(ul => ul.classList.remove('highlighting'));
-    document.querySelectorAll('.highlighted').forEach(e=>{
-      e.classList.remove('highlighted','link-directa','link-indirecta');
-    });
-    clearLines();
-    hideCaption();
-  });
-}
-
-/* ════════════════════════════════════════
-   CLICK → DETAIL PANEL
-════════════════════════════════════════ */
-const detailPanel   = document.getElementById('detailPanel');
-const detailContent = document.getElementById('detailContent');
-
-function showDetail(instrData){
-  /* Instrument clicked */
-  const odsEntries = Object.entries(instrData.ods);
-  const dCount = odsEntries.filter(([,v])=>v.t==='D').length;
-  const iCount = odsEntries.filter(([,v])=>v.t==='I').length;
-
-  const cards = odsEntries.map(([o,rel])=>{
-    const tipo = rel.t==='D'?'Directa':'Indirecta';
-    const cls  = rel.t==='D'?'directa':'indirecta';
-    return `<div class="dp-conn-card ${cls}">
-      <img class="dp-conn-img" src="${ODS_ICON(+o)}" alt="ODS ${o}">
-      <div class="dp-conn-body">
-        <h4>ODS ${o}: ${ODS_NAMES[+o]}</h4>
-        <span class="conn-tipo ${cls}">${tipo}</span>
-        <p>${rel.e}</p>
+  const cards=allOds.map(({o,tipo,e})=>{
+    const cls=tipo==='D'?'direct':tipo==='I'?'indirect':'none';
+    const badge=tipo==='D'?'ct-direct':tipo==='I'?'ct-indirect':'ct-none';
+    const label=tipo==='D'?'Directa':tipo==='I'?'Indirecta':'Sin relación';
+    const content=e?`<p>${e}</p>`:`<p class="card-no-rel">No se identificó relación entre este instrumento y el ODS ${o}.</p>`;
+    return `<div class="dp-card card-${cls}" data-dprel="${tipo}">
+      <img class="card-thumb-img" src="${ODS_ICON(o)}" alt="ODS ${o}">
+      <div class="card-body">
+        <h4>ODS ${o}: ${ODS_NAMES[o]}</h4>
+        <span class="card-tipo ${badge}">${label}</span>
+        ${content}
       </div>
     </div>`;
   }).join('');
 
-  const colorStyle = `background:${TYPE_COLORS[instrData.type]}`;
-
-  detailContent.innerHTML = `
-    <div class="dp-header">
-      <div class="dp-icon-instr" style="${colorStyle}">
-        <span class="dp-code">${instrData.code}</span>
-        <span class="dp-tag">${instrData.typeLabel}</span>
+  document.getElementById('detailContent').innerHTML=`
+    <div class="dp-hdr">
+      <div class="dp-icon-instr" style="background:${tc}">
+        <span class="di-code">${ins.short.substring(0,6)}</span>
+        <span class="di-tag">${tl}</span>
       </div>
-      <div class="dp-info">
-        <h2>${instrData.fullName}</h2>
+      <div style="flex:1">
+        <h2>${ins.fullName}</h2>
         <div class="dp-stats">
-          <span class="dp-stat directa">✦ ${dCount} relaciones directas</span>
-          <span class="dp-stat indirecta">◎ ${iCount} relaciones indirectas</span>
-          <span class="dp-stat" style="background:#f3f4f6;color:#4b5563">Total: ${odsEntries.length} ODS vinculados</span>
+          <span class="dp-stat ds-direct">✦ ${dC} directas</span>
+          <span class="dp-stat ds-indirect">◎ ${iC} indirectas</span>
+          <span class="dp-stat ds-none">✗ ${nC} sin relación</span>
+          <span class="dp-stat ds-total">17 ODS evaluados</span>
         </div>
       </div>
       <button class="dp-close" onclick="closeDetail()">✕</button>
     </div>
-    <div class="dp-connections">${cards}</div>`;
-  detailPanel.classList.add('open');
-  detailPanel.scrollIntoView({behavior:'smooth',block:'nearest'});
+    <div class="dp-filter">
+      <span class="dp-filter-label">Filtrar:</span>
+      <button class="dp-chip dpc-all active" onclick="dpSetFilter('all',this)">Todos</button>
+      <button class="dp-chip dpc-direct" onclick="dpSetFilter('D',this)">Directas</button>
+      <button class="dp-chip dpc-indirect" onclick="dpSetFilter('I',this)">Indirectas</button>
+      <button class="dp-chip dpc-none" onclick="dpSetFilter('N',this)">Sin relación</button>
+    </div>
+    <div class="dp-cards" id="dpCards">${cards}</div>`;
+
+  document.getElementById('detailPanel').classList.add('open');
+  setTimeout(()=>document.getElementById('detailPanel').scrollIntoView({behavior:'smooth',block:'nearest'}),50);
 }
 
 function showDetailODS(odsNum){
-  const instrIds = SDG_TO_INSTRS[odsNum];
-  const dCount = instrIds.filter(id=>{
-    const instr=INSTRUMENTS.find(x=>x.id===id);
-    return instr?.ods[odsNum]?.t==='D';
-  }).length;
-  const iCount = instrIds.length - dCount;
+  const allInstrs=INSTRUMENTS.map(ins=>{
+    const rel=ins.ods[odsNum];
+    return {ins,rel,tipo:rel?(rel.t==='D'?'D':'I'):'N',e:rel?rel.e:null};
+  });
+  const dC=allInstrs.filter(x=>x.tipo==='D').length;
+  const iC=allInstrs.filter(x=>x.tipo==='I').length;
+  const nC=allInstrs.filter(x=>x.tipo==='N').length;
 
-  const cards = instrIds.map(id=>{
-    const instr = INSTRUMENTS.find(x=>x.id===id);
-    if(!instr) return '';
-    const rel = instr.ods[odsNum];
-    const tipo = rel.t==='D'?'Directa':'Indirecta';
-    const cls  = rel.t==='D'?'directa':'indirecta';
-    return `<div class="dp-conn-card ${cls}">
-      <div class="dp-conn-instr" style="background:${TYPE_COLORS[instr.type]}">
-        <span style="font-size:11px;font-weight:700;color:#fff">${instr.code}</span>
+  const cards=allInstrs.map(({ins,tipo,e})=>{
+    const cls=tipo==='D'?'direct':tipo==='I'?'indirect':'none';
+    const badge=tipo==='D'?'ct-direct':tipo==='I'?'ct-indirect':'ct-none';
+    const label=tipo==='D'?'Directa':tipo==='I'?'Indirecta':'Sin relación';
+    const tc=TYPE_COLORS[ins.type];
+    const content=e?`<p>${e}</p>`:`<p class="card-no-rel">No se identificó relación entre este ODS y el instrumento ${ins.short}.</p>`;
+    return `<div class="dp-card card-${cls}" data-dprel="${tipo}">
+      <div class="card-thumb-instr" style="background:${tc}">
+        <span class="ct-code">${ins.short.substring(0,8)}</span>
+        <span class="ct-tag">${TYPE_LABELS[ins.type]}</span>
       </div>
-      <div class="dp-conn-body">
-        <h4>${instr.fullName}</h4>
-        <span class="conn-tipo ${cls}">${tipo}</span>
-        <p>${rel.e}</p>
+      <div class="card-body">
+        <h4>${ins.short}</h4>
+        <span class="card-tipo ${badge}">${label}</span>
+        ${content}
       </div>
     </div>`;
   }).join('');
 
-  detailContent.innerHTML = `
-    <div class="dp-header">
-      <div class="dp-icon"><img src="${ODS_ICON(odsNum)}" alt="ODS ${odsNum}"></div>
-      <div class="dp-info">
+  document.getElementById('detailContent').innerHTML=`
+    <div class="dp-hdr">
+      <img class="dp-icon-img" src="${ODS_ICON(odsNum)}" alt="ODS ${odsNum}">
+      <div style="flex:1">
         <h2>ODS ${odsNum}: ${ODS_NAMES[odsNum]}</h2>
         <div class="dp-stats">
-          <span class="dp-stat directa">✦ ${dCount} relaciones directas</span>
-          <span class="dp-stat indirecta">◎ ${iCount} relaciones indirectas</span>
-          <span class="dp-stat" style="background:#f3f4f6;color:#4b5563">Total: ${instrIds.length} instrumentos vinculados</span>
+          <span class="dp-stat ds-direct">✦ ${dC} directas</span>
+          <span class="dp-stat ds-indirect">◎ ${iC} indirectas</span>
+          <span class="dp-stat ds-none">✗ ${nC} sin relación</span>
+          <span class="dp-stat ds-total">${INSTRUMENTS.length} instrumentos</span>
         </div>
       </div>
       <button class="dp-close" onclick="closeDetail()">✕</button>
     </div>
-    <div class="dp-connections">${cards}</div>`;
-  detailPanel.classList.add('open');
-  detailPanel.scrollIntoView({behavior:'smooth',block:'nearest'});
+    <div class="dp-filter">
+      <span class="dp-filter-label">Filtrar:</span>
+      <button class="dp-chip dpc-all active" onclick="dpSetFilter('all',this)">Todos</button>
+      <button class="dp-chip dpc-direct" onclick="dpSetFilter('D',this)">Directas</button>
+      <button class="dp-chip dpc-indirect" onclick="dpSetFilter('I',this)">Indirectas</button>
+      <button class="dp-chip dpc-none" onclick="dpSetFilter('N',this)">Sin relación</button>
+    </div>
+    <div class="dp-cards" id="dpCards">${cards}</div>`;
+
+  document.getElementById('detailPanel').classList.add('open');
+  setTimeout(()=>document.getElementById('detailPanel').scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+}
+
+function dpSetFilter(f,btn){
+  document.querySelectorAll('.dp-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#dpCards .dp-card').forEach(card=>{
+    const rel=card.dataset.dprel;
+    card.classList.toggle('dp-hidden', f!=='all' && rel!==f);
+  });
 }
 
 function closeDetail(){
-  detailPanel.classList.remove('open');
+  document.getElementById('detailPanel').classList.remove('open');
 }
 
-/* ════════════════════════════════════════
-   INIT
-════════════════════════════════════════ */
-buildRings();
+/* ════════════════════════════════
+   CIRCULAR VIEW
+════════════════════════════════ */
+let circBuilt=false;
+const circSvg=document.getElementById('circSvg');
 
-const instrRing = document.getElementById('instrRing');
-const sdgRing   = document.getElementById('sdgRing');
-const allRings  = [instrRing, sdgRing];
+function buildCircular(){
+  circBuilt=true;
+  const instrRing=document.getElementById('instrRing');
+  const sdgRing=document.getElementById('sdgRing');
 
-/* Attach events to instrument tiles */
-INSTRUMENTS.forEach(instr=>{
-  const li = document.getElementById(instr.id);
-  if(!li) return;
-  attachHover(li, allRings, instr, false, null);
-  li.addEventListener('click',()=> showDetail(instr));
-});
+  INSTRUMENTS.forEach(ins=>{
+    const targets=Object.keys(ins.ods).map(o=>'sdg'+o).join(' ');
+    const li=document.createElement('li');
+    li.id='c'+ins.id;
+    li.dataset.targets=targets;
+    li.dataset.instrId=ins.id;
+    li.style.left=ins.pos.l+'px';
+    li.style.top=ins.pos.t+'px';
+    li.innerHTML=`<div class="instr-li ${ins.type}"><span class="il-code">${ins.short.length>8?ins.short.substring(0,8):ins.short}</span><span class="il-tag">${TYPE_LABELS[ins.type]}</span></div>`;
+    instrRing.appendChild(li);
+  });
 
-/* Attach events to ODS tiles */
-for(let o=1;o<=17;o++){
-  const li = document.getElementById('sdg'+o);
-  if(!li) continue;
-  attachHover(li, allRings, null, true, o);
-  li.addEventListener('click',()=> showDetailODS(o));
+  for(let o=1;o<=17;o++){
+    const targets=SDG_TO_INSTRS[o].map(id=>'c'+id).join(' ');
+    const li=document.createElement('li');
+    li.id='sdg'+o;
+    li.dataset.targets=targets;
+    li.dataset.odsNum=o;
+    li.style.left=SDG_POS[o].l+'px';
+    li.style.top=SDG_POS[o].t+'px';
+    li.innerHTML=`<img src="${ODS_ICON(o)}" alt="ODS ${o}" loading="lazy">`;
+    sdgRing.appendChild(li);
+  }
+
+  const allLists=[instrRing,sdgRing];
+
+  INSTRUMENTS.forEach(ins=>{
+    const li=document.getElementById('c'+ins.id);
+    attachCircHover(li, allLists, ins, null);
+    li.addEventListener('click',()=>{clickInstr(ins.id)});
+  });
+
+  for(let o=1;o<=17;o++){
+    const li=document.getElementById('sdg'+o);
+    attachCircHover(li, allLists, null, o);
+    li.addEventListener('click',()=>{clickODS(o)});
+  }
+
+  applyCircScale();
 }
 
-/* Responsive scale */
-function applyScale(){
-  const wrap = document.getElementById('scaleWrap');
-  const available = window.innerWidth - 40;
-  if(available < 1120){
-    const s = available / 1120;
-    wrap.style.transform = `scale(${s})`;
-    wrap.style.transformOrigin = 'top left';
-    wrap.style.width = '1120px';
-    wrap.parentElement.style.height = (733*s+24)+'px';
+function attachCircHover(li, allLists, ins, odsNum){
+  li.addEventListener('mouseenter',()=>{
+    allLists.forEach(ul=>ul.classList.add('highlighting'));
+    li.classList.add('highlighted');
+    const targets=(li.dataset.targets||'').split(' ').filter(Boolean);
+    targets.forEach(tid=>{
+      const tel=document.getElementById(tid);
+      if(!tel) return;
+      tel.classList.add('highlighted');
+      let tipo='I';
+      if(ins){
+        const o=+tid.replace('sdg','');
+        tipo=ins.ods[o]?.t||'I';
+      } else if(odsNum){
+        const instrId=tid.replace('c','');
+        const tinstr=INSTRUMENTS.find(x=>x.id===instrId);
+        tipo=tinstr?.ods[odsNum]?.t||'I';
+      }
+      tel.classList.add(tipo==='D'?'hl-direct':'hl-indirect');
+    });
+    drawCircLines(li, targets, ins, odsNum);
+
+    const caption=document.getElementById('circCaption');
+    const title=document.getElementById('ccTitle');
+    const sub=document.getElementById('ccSub');
+    if(ins){
+      const d=Object.values(ins.ods).filter(r=>r.t==='D').length;
+      const i=Object.values(ins.ods).filter(r=>r.t==='I').length;
+      title.textContent=ins.short;
+      sub.textContent=`${d} directas · ${i} indirectas`;
+    } else {
+      const tot=SDG_TO_INSTRS[odsNum].length;
+      const d=SDG_TO_INSTRS[odsNum].filter(id=>{const x=INSTRUMENTS.find(i=>i.id===id);return x?.ods[odsNum]?.t==='D'}).length;
+      title.textContent=`ODS ${odsNum}: ${ODS_NAMES[odsNum]}`;
+      sub.textContent=`${tot} instrumentos · ${d} directas`;
+    }
+    const lv=parseFloat(li.style.left)+80;
+    const tv=parseFloat(li.style.top)+40;
+    caption.style.left=(lv>900?lv-220:lv+4)+'px';
+    caption.style.top=(tv-30)+'px';
+    caption.classList.add('visible');
+  });
+
+  li.addEventListener('mouseleave',()=>{
+    allLists.forEach(ul=>ul.classList.remove('highlighting'));
+    document.querySelectorAll('.highlighted').forEach(e=>e.classList.remove('highlighted','hl-direct','hl-indirect'));
+    clearCircLines();
+    document.getElementById('circCaption').classList.remove('visible');
+  });
+}
+
+function centerOf(el){
+  return{x:parseFloat(el.style.left)+40, y:parseFloat(el.style.top)+40};
+}
+
+function drawCircLines(fromEl, targets, ins, odsNum){
+  clearCircLines();
+  const from=centerOf(fromEl);
+  targets.forEach(tid=>{
+    const toEl=document.getElementById(tid);
+    if(!toEl) return;
+    let tipo='I';
+    if(ins){const o=+tid.replace('sdg','');tipo=ins.ods[o]?.t||'I';}
+    else if(odsNum){const id=tid.replace('c','');const x=INSTRUMENTS.find(i=>i.id===id);tipo=x?.ods[odsNum]?.t||'I';}
+    const to=centerOf(toEl);
+    const color=tipo==='D'?'#22c55e':'#f59e0b';
+    const dash=tipo==='D'?'':' stroke-dasharray="6,4"';
+    const len=Math.hypot(to.x-from.x,to.y-from.y);
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',from.x);line.setAttribute('y1',from.y);
+    line.setAttribute('x2',to.x);line.setAttribute('y2',to.y);
+    line.setAttribute('stroke',color);line.setAttribute('stroke-width','1.8');
+    line.setAttribute('stroke-opacity','0.8');
+    if(tipo!=='D') line.setAttribute('stroke-dasharray','6,4');
+    circSvg.appendChild(line);
+  });
+}
+
+function clearCircLines(){
+  while(circSvg.lastChild&&circSvg.lastChild.tagName!=='defs') circSvg.removeChild(circSvg.lastChild);
+}
+
+function applyCircScale(){
+  const wrap=document.getElementById('circScale');
+  const avail=Math.min(window.innerWidth-40, window.innerWidth);
+  if(avail<1140){
+    const s=avail/1140;
+    wrap.style.transform=`scale(${s})`;
+    wrap.style.transformOrigin='top left';
+    wrap.parentElement.style.height=(733*s+24)+'px';
   } else {
-    wrap.style.transform = '';
-    wrap.parentElement.style.height = '';
+    wrap.style.transform='';
+    wrap.parentElement.style.height='';
   }
 }
-applyScale();
-window.addEventListener('resize', applyScale);
+window.addEventListener('resize',applyCircScale);
+
+/* ════════════════════════════════
+   INIT
+════════════════════════════════ */
+buildMatrix();
 </script>
 </body>
 </html>
